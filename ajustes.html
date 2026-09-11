@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Ajustes</title>
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#b9a08f" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="icon" href="icons/icon-192.png" />
+
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/ajustes.css" />
+</head>
+<body>
+
+<div class="app-frame">
+
+  <header class="app-header">
+    <div class="awning-band">
+      <svg class="awning-scallop" viewBox="0 0 480 20" preserveAspectRatio="none">
+        <path d="M0,0 Q20.0,20 40.0,0 Q60.0,20 80.0,0 Q100.0,20 120.0,0 Q140.0,20 160.0,0 Q180.0,20 200.0,0 Q220.0,20 240.0,0 Q260.0,20 280.0,0 Q300.0,20 320.0,0 Q340.0,20 360.0,0 Q380.0,20 400.0,0 Q420.0,20 440.0,0 Q460.0,20 480.0,0 L480,20 L0,20 Z"></path>
+      </svg>
+    </div>
+  </header>
+
+  <main class="app-body">
+    <div class="page-header">
+      <a class="back-btn" href="index.html">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+      </a>
+      <div class="page-header-title">Ajustes</div>
+    </div>
+
+    <div class="section-title">Apariencia</div>
+    <p class="section-sub">Elige el color con el que se viste tu sistema.</p>
+    <div class="card">
+      <div class="theme-picker">
+        <button class="theme-option active" data-theme="neutro" type="button"><span class="theme-swatch"></span>Neutro</button>
+        <button class="theme-option" data-theme="rosa" type="button"><span class="theme-swatch"></span>Rosa</button>
+        <button class="theme-option" data-theme="azul" type="button"><span class="theme-swatch"></span>Azul</button>
+        <button class="theme-option" data-theme="verde" type="button"><span class="theme-swatch"></span>Verde</button>
+        <button class="theme-option" data-theme="amarillo" type="button"><span class="theme-swatch"></span>Amarillo</button>
+      </div>
+    </div>
+
+    <div class="section-title">Información del sistema</div>
+    <div class="card">
+      <div class="info-row"><span>Productos en catálogo</span><span id="info-total-productos">0</span></div>
+      <div class="info-row"><span>Categorías</span><span id="info-total-categorias">0</span></div>
+      <div class="info-row"><span>Listas guardadas</span><span id="info-total-listas">0</span></div>
+      <div class="info-row"><span>Cuentas con deuda</span><span id="info-total-cuentas">0</span></div>
+      <div class="info-row"><span>Conexión a Firebase</span><span id="info-estado-firebase">—</span></div>
+    </div>
+
+    <div class="section-title">Ayuda</div>
+    <div class="card">
+      <p class="section-sub" style="margin-bottom:14px;">¿Dudas sobre cómo configurar o usar el sistema?</p>
+      <button class="btn btn-outline" id="btn-guia">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg>
+        Ver guía rápida
+      </button>
+    </div>
+
+    <p class="brand-credit">Hecho con cariño por <strong id="info-creador">Viax Studio</strong></p>
+  </main>
+
+</div>
+
+<!-- ================= MODAL: GUÍA RÁPIDA ================= -->
+<div class="modal-backdrop" id="modal-guia">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">Guía rápida</h2>
+    <p class="modal-sub">Todo lo que necesitas para dejar el sistema funcionando.</p>
+    <div class="card card-soft mb-0">
+      <p style="font-size:13px; line-height:1.6; margin:0 0 10px;"><strong>1. Conecta Firebase.</strong> Abre el archivo <code>js/config.js</code> y pega los datos de tu proyecto (Firestore activado). Al final de este archivo tienes el paso a paso completo.</p>
+      <p style="font-size:13px; line-height:1.6; margin:0 0 10px;"><strong>2. Publícalo.</strong> Sube esta carpeta a un hosting con HTTPS — la cámara solo funciona en HTTPS (o en <code>localhost</code>).</p>
+      <p style="font-size:13px; line-height:1.6; margin:0 0 10px;"><strong>3. Registra tu catálogo.</strong> Entra a "Inventario → Registrar", elige o crea una categoría y agrega productos.</p>
+      <p style="font-size:13px; line-height:1.6; margin:0 0 10px;"><strong>4. Vende.</strong> En "Ventas", escanea, busca por texto o por voz. Si es fiado, marca "Fiado" al cobrar.</p>
+      <p style="font-size:13px; line-height:1.6; margin:0 0 10px;"><strong>5. Controla tu stock.</strong> En "Inventario" revisa categorías, movimientos y alertas de bajo stock.</p>
+      <p style="font-size:13px; line-height:1.6; margin:0;"><strong>6. Tu QR de Yape.</strong> Reemplaza el archivo <code>img/qr-yape.png</code> por tu propio código y edita tu nombre en <code>js/config.js</code> (campo "propietaria"). Aparecerá en Ventas → Vender.</p>
+    </div>
+    <button class="btn btn-primary" id="cerrar-guia" style="margin-top:16px;">Entendido</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span id="toast-text"></span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-firestore-compat.min.js"></script>
+
+<script src="js/config.js"></script>
+<script src="js/state.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/mas.js"></script>
+<script src="js/app.js"></script>
+<script src="js/main-ajustes.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
+</script>
+
+</body>
+</html>

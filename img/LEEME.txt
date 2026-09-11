@@ -1,0 +1,23 @@
+CÓMO PONER TU QR DE YAPE
+=========================
+
+1. Abre la app de Yape → "Cobrar" / "Mi QR" → descarga o haz una captura
+   de tu código QR personal.
+
+2. Recorta la imagen para que quede cuadrada (se ve mejor), y guárdala
+   con este nombre exacto:
+
+       qr-yape.png
+
+3. Ponla dentro de esta carpeta (la misma donde está este archivo:
+   "img/"), reemplazando o junto al LEEME.txt.
+
+4. Abre "js/config.js" y escribe tu nombre (o el de la dueña/dueño del
+   negocio) en el campo NEGOCIO.propietaria — aparece justo debajo del QR.
+
+Eso es todo. El QR aparece automáticamente en "Ventas → Vender", en la
+tarjeta "Cobrar con Yape", para que el cliente lo escanee al pagar.
+
+Si todavía no subes la imagen, en ese espacio se ve un aviso que dice
+"Coloca tu QR de Yape en img/qr-yape.png" — no es un error, es solo un
+recordatorio para que no se te olvide.

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Inicio</title>
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#b9a08f" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="icon" href="icons/icon-192.png" />
+
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/home.css" />
+</head>
+<body>
+
+<div class="app-frame">
+
+  <header class="app-header">
+    <div class="awning-band">
+      <svg class="awning-scallop" viewBox="0 0 480 20" preserveAspectRatio="none">
+        <path d="M0,0 Q20.0,20 40.0,0 Q60.0,20 80.0,0 Q100.0,20 120.0,0 Q140.0,20 160.0,0 Q180.0,20 200.0,0 Q220.0,20 240.0,0 Q260.0,20 280.0,0 Q300.0,20 320.0,0 Q340.0,20 360.0,0 Q380.0,20 400.0,0 Q420.0,20 440.0,0 Q460.0,20 480.0,0 L480,20 L0,20 Z"></path>
+      </svg>
+    </div>
+  </header>
+
+  <main class="app-body">
+    <div class="home-hero">
+      <div class="home-sub" style="font-size:14px;">¿Qué necesitas hacer ahora?</div>
+    </div>
+
+    <div class="home-tiles">
+      <a class="home-tile" href="ventas.html">
+        <div class="home-tile-icon tile-ventas">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        </div>
+        <div class="home-tile-text">
+          <div class="home-tile-title">Ventas</div>
+          <div class="home-tile-sub">Escanea, cobra y emite boletas</div>
+        </div>
+        <svg class="home-tile-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+      </a>
+
+      <a class="home-tile" href="inventario.html">
+        <div class="home-tile-icon tile-inventario">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7 12 3 4 7v10l8 4 8-4V7Z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg>
+        </div>
+        <div class="home-tile-text">
+          <div class="home-tile-title">Inventario</div>
+          <div class="home-tile-sub">Catálogo por categorías y stock</div>
+        </div>
+        <span class="badge-dot hidden" id="badge-home-inventario" style="top:12px; right:44px;"></span>
+        <svg class="home-tile-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+      </a>
+
+      <a class="home-tile" href="cuentas.html">
+        <div class="home-tile-icon tile-cuentas">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7a2 2 0 0 1 2-2h11l4 4v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M16 13h3"/></svg>
+        </div>
+        <div class="home-tile-text">
+          <div class="home-tile-title">Cuentas</div>
+          <div class="home-tile-sub">Fiado, abonos y estados de cuenta</div>
+        </div>
+        <svg class="home-tile-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+      </a>
+
+      <a class="home-tile home-tile-secondary" href="ajustes.html">
+        <div class="home-tile-icon tile-ajustes">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a7.97 7.97 0 0 0 .1-3l2-1.6-2-3.4-2.4 1a8 8 0 0 0-2.6-1.5L14 3h-4l-.5 2.5a8 8 0 0 0-2.6 1.5l-2.4-1-2 3.4L4.5 12a8 8 0 0 0 0 3l-2 1.6 2 3.4 2.4-1a8 8 0 0 0 2.6 1.5L10 21h4l.5-2.5a8 8 0 0 0 2.6-1.5l2.4 1 2-3.4Z"/></svg>
+        </div>
+        <div class="home-tile-text">
+          <div class="home-tile-title">Ajustes</div>
+          <div class="home-tile-sub">Apariencia, información y ayuda</div>
+        </div>
+        <svg class="home-tile-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+      </a>
+    </div>
+  </main>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-firestore-compat.min.js"></script>
+
+<script src="js/config.js"></script>
+<script src="js/state.js"></script>
+<script src="js/app.js"></script>
+<script src="js/main-home.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch((err) => {
+        console.warn("No se pudo registrar el service worker:", err);
+      });
+    });
+  }
+</script>
+
+</body>
+</html>

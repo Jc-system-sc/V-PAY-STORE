@@ -1,0 +1,16 @@
+Coloca aquí 4 imágenes PNG cuadradas con el logo/ícono de tu negocio:
+
+  icon-192.png            192x192 px
+  icon-192-maskable.png   192x192 px (versión "maskable", ver abajo)
+  icon-512.png            512x512 px
+  icon-512-maskable.png   512x512 px (versión "maskable")
+
+¿Qué es "maskable"? Algunos celulares Android recortan el ícono en círculo
+o cuadrado redondeado. Un ícono "maskable" tiene el diseño importante
+dentro de un círculo central que ocupa cerca del 80% de la imagen, con
+margen alrededor, así no se corta mal. Si no quieres hacer una versión
+aparte, usa el mismo archivo para ambas — no se rompe nada, solo se ve un
+poco más chico en los celulares que recortan a círculo.
+
+Una vez subidas, la app queda lista para "Instalar" / "Agregar a pantalla
+de inicio" desde el celular.

@@ -1,0 +1,134 @@
+/* ==========================================================================
+   VENTAS.CSS — exclusivo de ventas.html
+   ========================================================================== */
+
+/* ---------- Escáner principal (pestaña Vender) ---------- */
+.scanner-card{ background: linear-gradient(165deg, #3a322c 0%, #1c1712 100%); border-radius: var(--radius-lg); padding: 14px; margin-bottom: 16px; position: relative; }
+
+#qr-reader{ width: 100% !important; height: 100% !important; position: absolute !important; inset: 0 !important; }
+#qr-reader > div{ width: 100% !important; height: 100% !important; position: absolute !important; inset: 0 !important; }
+#qr-reader video{
+  width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important;
+  position: absolute !important; top: 0 !important; left: 0 !important;
+}
+#qr-reader img{ display:none !important; }
+
+.scanner-placeholder{
+  height: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color: rgba(255,255,255,.8); gap: 10px; text-align:center; padding: 20px;
+}
+.scanner-placeholder svg{ opacity:.85; }
+.scanner-placeholder span{ font-family: var(--font-body); font-size: 12.5px; font-weight: 400; line-height:1.4; }
+
+.scanner-controls{ display:flex; gap: 10px; margin-top: 12px; }
+.scanner-controls .btn{ flex: 1; }
+.btn-icon-square{ flex: 0 0 auto !important; width: 52px; padding: 0 !important; }
+.btn-icon-square.linterna-on{ background: var(--amber); color: #fff; }
+
+.scan-last{ margin-top: 10px; font-family: var(--font-body); font-size: 12px; font-weight: 500; color: rgba(255,255,255,.82); text-align:center; min-height: 16px; }
+
+/* Botón de micrófono (búsqueda por voz) */
+.btn-mic{
+  flex: 0 0 auto;
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--surface-soft);
+  color: var(--primary-dark);
+  display:flex; align-items:center; justify-content:center;
+  position: relative;
+}
+.btn-mic.escuchando{ background: var(--coral); color:#fff; border-color: var(--coral); animation: pulseMic 1s ease-in-out infinite; }
+@keyframes pulseMic{ 0%,100%{ box-shadow: 0 0 0 0 rgba(198,91,82,.45); } 50%{ box-shadow: 0 0 0 8px rgba(198,91,82,0); } }
+
+/* ---------- Cobrar con Yape (tarjeta dentro de "Vender") ---------- */
+.yape-card{ display:flex; align-items:center; gap:14px; }
+.yape-card .yape-qr-wrap{ margin: 0; flex-shrink:0; }
+.yape-card-text{ min-width:0; }
+.yape-card-titulo{ font-family: var(--font-display); font-size:16px; font-weight:700; color: var(--ink); }
+.yape-card-nombre{ font-family: var(--font-body); font-size:12.5px; color: var(--ink-soft); margin-top:2px; }
+
+/* ---------- Carrito (Vender y Listas) ---------- */
+.venta-scroll{ max-height: 300px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.venta-scroll.venta-scroll-lg{ max-height: 46vh; }
+
+.sale-item{ display:flex; align-items:center; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.sale-item:last-child{ border-bottom:none; }
+.sale-item-info{ flex:1; min-width:0; }
+.sale-item-name{ font-family: var(--font-display); font-size: 16px; font-weight: 600; color: var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:6px; }
+.sale-item-price-row{ display:flex; align-items:center; gap: 6px; margin-top: 2px; }
+.sale-item-price{ font-family: var(--font-body); font-size: 12px; font-weight: 400; color: var(--ink-soft); }
+.sale-item-price.editado{ color: var(--price); font-weight: 700; }
+.price-edit-btn{
+  width: 20px; height: 20px; border-radius: 6px; border:none; background: var(--surface-soft);
+  color: var(--ink-faint); display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.price-edit-btn:active{ transform: scale(.9); }
+.mini-tag{ font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing:.04em; padding: 2px 6px; border-radius: 999px; background: var(--amber-soft); color:#a8641f; flex-shrink:0; }
+.price-edit-input{
+  width: 74px; padding: 5px 7px; border-radius: 8px; border: 1.5px solid var(--price);
+  font-family: var(--font-body); font-size: 12px; font-weight: 700; color: var(--price);
+  text-align:right; background:#fff;
+}
+
+.qty-control{ display:flex; align-items:center; gap: 8px; background: var(--surface-soft); border-radius: 10px; padding: 4px; flex-shrink: 0; }
+.qty-btn{ width: 26px; height: 26px; border-radius: 8px; border:none; background:#fff; color: var(--primary-dark); font-family: var(--font-body); font-weight:700; display:flex; align-items:center; justify-content:center; box-shadow: 0 2px 4px rgba(0,0,0,.08); }
+.qty-val{ font-family: var(--font-body); font-size: 13px; font-weight:700; min-width: 16px; text-align:center; }
+
+.sale-item-total{ font-family: var(--font-body); font-size: 14px; font-weight: 800; color: var(--price); min-width: 58px; text-align:right; flex-shrink: 0; }
+.remove-btn{ width: 26px; height: 26px; border-radius: 8px; border:none; background: var(--coral-soft); color: var(--coral); display:flex; align-items:center; justify-content:center; flex-shrink: 0; }
+
+/* Animación de "item agregado" */
+@keyframes popIn{ 0%{ transform: scale(.9); opacity:0; } 100%{ transform: scale(1); opacity:1; } }
+.sale-item.nuevo{ animation: popIn .25s ease; }
+
+/* ---------- Barra de total ---------- */
+.total-bar{
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 60px;
+  width: 100%; max-width: 430px; z-index: 102;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
+  display:flex; flex-direction:column; gap: 10px;
+}
+.total-row{ display:flex; justify-content:space-between; align-items:baseline; }
+.total-label{ font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); }
+.total-value{ font-family: var(--font-display); font-style: italic; font-size: 28px; font-weight: 600; color: var(--price); }
+.subtotal-value{ font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+
+.descuento-row:empty{ display:none; }
+.descuento-link{
+  background:none; border:none; padding:0; cursor:pointer;
+  font-family: var(--font-body); font-size: 12px; font-weight: 700; color: var(--primary-dark); text-decoration: underline;
+}
+.descuento-activo{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  font-family: var(--font-body); font-size: 12px; font-weight: 700; color: var(--price);
+}
+.descuento-activo button{
+  background: var(--coral-soft); color: var(--coral); border:none; border-radius:8px;
+  padding: 4px 10px; font-size:11px; font-weight:700; flex-shrink:0;
+}
+
+/* ---------- Boleta ---------- */
+.receipt{ background:#fff; border-radius: 18px; padding: 24px 20px; width: 100%; }
+.receipt-header{ text-align:center; margin-bottom: 14px; }
+.receipt-header h2{ font-family: var(--font-display); font-size: 24px; font-weight: 700; margin: 0 0 3px; color: var(--primary-dark); }
+.receipt-header p{ margin:0; font-family: var(--font-body); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); }
+.receipt-divider{ border:none; border-top: 1.5px dashed var(--line); margin: 14px 0; }
+.receipt-meta{ font-family: var(--font-body); font-size: 12px; font-weight: 500; color: var(--ink-soft); display:flex; justify-content:space-between; margin-bottom:4px; }
+.receipt-table{ width:100%; border-collapse:collapse; margin-top: 8px; }
+.receipt-table th{ text-align:left; font-family: var(--font-body); font-size: 10px; font-weight: 700; text-transform:uppercase; letter-spacing:.06em; color: var(--ink-faint); padding-bottom:6px; }
+.receipt-table td{ font-family: var(--font-body); font-size: 12.5px; font-weight: 500; padding: 5px 0; color: var(--ink); vertical-align:top; }
+.receipt-table td.num{ text-align:right; white-space:nowrap; }
+.receipt-total{ display:flex; justify-content:space-between; align-items:baseline; margin-top: 12px; padding-top:12px; border-top: 1.5px solid var(--ink); }
+.receipt-total span:first-child{ font-family: var(--font-body); font-size:12px; font-weight:700; text-transform: uppercase; letter-spacing: 0.06em; }
+.receipt-total span:last-child{ font-family: var(--font-display); font-style: italic; font-size: 24px; font-weight: 600; color: var(--price); }
+.receipt-footer{ text-align:center; margin-top:16px; font-family: var(--font-display); font-style: italic; font-size: 13px; color: var(--ink-faint); }
+
+.receipt-fiado-banner{
+  margin-top:14px; padding:10px 12px; border-radius:12px; text-align:center;
+  background: var(--coral-soft); color: var(--coral);
+  font-family: var(--font-body); font-size:11.5px; font-weight:800; text-transform:uppercase; letter-spacing:.04em;
+}
+
+.offscreen-render{ position: fixed; top: 0; left: -9999px; width: 380px; }

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Ventas</title>
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#b9a08f" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="icon" href="icons/icon-192.png" />
+
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/ventas.css" />
+</head>
+<body>
+
+<datalist id="lista-categorias-datalist"></datalist>
+
+<div class="app-frame con-total-bar">
+
+  <header class="app-header">
+    <div class="awning-band">
+      <svg class="awning-scallop" viewBox="0 0 480 20" preserveAspectRatio="none">
+        <path d="M0,0 Q20.0,20 40.0,0 Q60.0,20 80.0,0 Q100.0,20 120.0,0 Q140.0,20 160.0,0 Q180.0,20 200.0,0 Q220.0,20 240.0,0 Q260.0,20 280.0,0 Q300.0,20 320.0,0 Q340.0,20 360.0,0 Q380.0,20 400.0,0 Q420.0,20 440.0,0 Q460.0,20 480.0,0 L480,20 L0,20 Z"></path>
+      </svg>
+    </div>
+  </header>
+
+  <main class="app-body">
+    <div class="page-header">
+      <a class="back-btn" href="index.html">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+      </a>
+      <div class="page-header-title">Ventas</div>
+    </div>
+
+    <!-- ---------- Vender ---------- -->
+    <section class="screen active" data-screen="vender">
+      <div class="scanner-card">
+        <div class="scanner-frame">
+          <div id="qr-reader" class="hidden"></div>
+          <div class="scanner-overlay hidden" id="scanner-overlay"></div>
+          <div class="scanner-placeholder" id="scanner-placeholder">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Toca "Iniciar escáner" y apunta<br/>la cámara al código de barras</span>
+          </div>
+        </div>
+        <div class="scanner-controls">
+          <button class="btn btn-dark" id="btn-escanear">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+            Iniciar escáner
+          </button>
+          <button class="btn btn-ghost btn-icon-square hidden" id="btn-linterna" title="Linterna" data-on="0">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 2.2 1.2 3.4 2 4.3.6.7 1 1.2 1 2.2v1.5h6v-1.5c0-1 .4-1.5 1-2.2.8-.9 2-2.1 2-4.3Z"/><path d="M9 21h6M10 18h4"/></svg>
+          </button>
+        </div>
+        <div class="scan-last" id="scan-last"></div>
+      </div>
+
+      <div class="card">
+        <div class="field mb-0">
+          <label>Buscar producto (o dilo en voz alta)</label>
+          <div class="search-row">
+            <div class="input-icon-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="buscar-manual" placeholder="Nombre o código EAN…" autocomplete="off" />
+            </div>
+            <button type="button" class="btn-mic hidden" id="btn-mic-vender" title="Buscar por voz">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div id="resultados-manual" class="hidden"></div>
+      </div>
+
+      <button class="btn btn-outline mb-0" id="btn-producto-libre" style="margin-bottom:16px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Producto sin código / libre
+      </button>
+
+      <div class="flex-between" style="margin-bottom:8px;">
+        <div class="section-title" style="margin:0;">Venta activa</div>
+        <span class="pill pill-soft" id="contador-venta"></span>
+      </div>
+      <div class="card venta-scroll" style="padding-top:6px; padding-bottom:6px;">
+        <div id="lista-venta"></div>
+      </div>
+
+      <!-- ---- Cobrar con Yape ---- -->
+      <div class="section-title">Cobrar con Yape</div>
+      <p class="section-sub">Muéstrale esta pantalla al cliente para que escanee y pague.</p>
+      <div class="card yape-card mb-0">
+        <div class="yape-qr-wrap" id="wrap-qr-yape">
+          <img src="img/qr-yape.png" alt="QR para pagar con Yape" id="img-qr-yape" onerror="this.closest('.yape-qr-wrap').classList.add('sin-imagen')" />
+        </div>
+        <div class="yape-card-text">
+          <div class="yape-card-titulo">Yape</div>
+          <div class="yape-card-nombre" id="texto-titular-yape">Nombre de la dueña</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Listas ---------- -->
+    <section class="screen" data-screen="listas">
+      <div class="section-title">Listas</div>
+      <p class="section-sub">Arma el pedido de un cliente de confianza y cotízalo. Cuando llegue, lo conviertes en venta con un toque.</p>
+
+      <button class="btn btn-primary" id="btn-nueva-lista" style="margin-bottom:16px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Nueva lista
+      </button>
+
+      <div class="card">
+        <div class="input-icon-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="buscar-listas" placeholder="Buscar lista por cliente…" autocomplete="off" />
+        </div>
+      </div>
+
+      <div id="contenedor-listas"></div>
+    </section>
+
+    <!-- ---------- Resumen ---------- -->
+    <section class="screen" data-screen="resumen">
+      <div class="section-title">Resumen de hoy</div>
+      <div class="card">
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-value" id="stat-ventas-hoy">0</div>
+            <div class="stat-label">Ventas</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="stat-ingresos-hoy">S/ 0</div>
+            <div class="stat-label">Ingresos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">Últimas ventas</div>
+      <div class="card" style="padding-top:6px; padding-bottom:6px;">
+        <div id="lista-ultimas-ventas"></div>
+      </div>
+
+      <div class="section-title">Cierre de caja</div>
+      <p class="section-sub">Cuenta el efectivo físico y compáralo contra las ventas pagadas de hoy (el fiado no cuenta, todavía no ingresó).</p>
+      <div class="card">
+        <div class="info-row"><span>Ventas pagadas hoy</span><span id="cierre-total-sistema">S/ 0.00</span></div>
+        <div class="field" style="margin-top:12px; margin-bottom:0;">
+          <label>Efectivo contado</label>
+          <input type="number" id="input-efectivo-contado" step="0.01" min="0" placeholder="Cuenta la caja y ponlo aquí" />
+        </div>
+        <div class="info-row hidden" id="fila-diferencia-caja" style="margin-top:6px;">
+          <span>Diferencia</span><span id="cierre-diferencia">S/ 0.00</span>
+        </div>
+      </div>
+
+      <div class="section-title">Más vendidos</div>
+      <p class="section-sub">Últimos 30 días, según tu historial de ventas.</p>
+      <div class="card" style="padding-top:6px; padding-bottom:6px;">
+        <div id="lista-top-productos"></div>
+      </div>
+
+      <div class="section-title">Clientes frecuentes</div>
+      <div class="card" style="padding-top:6px; padding-bottom:6px; margin-bottom:0;">
+        <div id="lista-clientes-frecuentes"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="total-bar" id="total-bar">
+    <div class="descuento-row" id="descuento-row"></div>
+    <div class="total-row hidden" id="subtotal-row">
+      <span class="total-label">Subtotal</span>
+      <span class="subtotal-value" id="subtotal-venta">S/ 0.00</span>
+    </div>
+    <div class="total-row">
+      <span class="total-label">Total de la venta</span>
+      <span class="total-value" id="total-venta">S/ 0.00</span>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" id="btn-vaciar-venta" disabled>Vaciar</button>
+      <button class="btn btn-primary" id="btn-confirmar-venta" disabled style="flex:2;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+        Confirmar venta
+      </button>
+    </div>
+  </div>
+
+  <nav class="tab-bar" data-tabbar="ventas">
+    <div class="tab-indicator"></div>
+    <button class="tab-btn active" data-tab="vender">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+      Vender
+    </button>
+    <button class="tab-btn" data-tab="listas">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3 6 1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2"/></svg>
+      Listas
+    </button>
+    <button class="tab-btn" data-tab="resumen">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+      Resumen
+    </button>
+  </nav>
+</div>
+
+<!-- ================= MODAL: ESCÁNER GENÉRICO (agregar producto a una Lista) ================= -->
+<div class="modal-backdrop" id="modal-scan-generico">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title" id="scan-generico-titulo">Escanear código</h2>
+    <p class="modal-sub" id="scan-generico-sub">Apunta la cámara al código de barras.</p>
+    <div class="scanner-frame" style="border-radius:16px;">
+      <div id="qr-reader-generico"></div>
+      <div class="scanner-overlay"></div>
+    </div>
+    <button class="btn btn-ghost" id="cerrar-scan-generico" style="margin-top:14px;">Cancelar</button>
+  </div>
+</div>
+
+<!-- ================= MODAL: PRODUCTO LIBRE ================= -->
+<div class="modal-backdrop" id="modal-producto-libre">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">Producto sin código</h2>
+    <p class="modal-sub">Se agrega solo a esta boleta — no queda guardado en tu catálogo.</p>
+    <form id="form-producto-libre">
+      <div class="field">
+        <label>Descripción</label>
+        <input type="text" id="libre-descripcion" placeholder="Ej. Pan francés (6 unidades)" required />
+      </div>
+      <div class="field-row mb-0">
+        <div class="field">
+          <label>Precio (S/)</label>
+          <input type="number" id="libre-precio" step="0.01" min="0" placeholder="0.00" required />
+        </div>
+        <div class="field">
+          <label>Cantidad</label>
+          <input type="number" id="libre-cantidad" min="1" step="1" value="1" required />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="margin-top:16px;">Agregar a la venta</button>
+    </form>
+  </div>
+</div>
+
+<!-- ================= MODAL: DATOS DEL CLIENTE (checkout: pagado o fiado) ================= -->
+<div class="modal-backdrop" id="modal-cliente">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">Datos del cliente</h2>
+    <p class="modal-sub">Elige si la venta se paga ahora o va a la cuenta del cliente.</p>
+
+    <div class="chip-row" style="margin-bottom:14px;">
+      <button type="button" class="chip active" id="chip-pago-pagado">Pagado</button>
+      <button type="button" class="chip" id="chip-pago-fiado">Fiado (a cuenta)</button>
+    </div>
+
+    <form id="form-cliente">
+      <div class="field">
+        <label>Nombre del cliente</label>
+        <input type="text" id="input-cliente-nombre" placeholder="Ej. Rosa Martínez" required />
+      </div>
+      <div class="field">
+        <label>Celular (opcional, para enviar por WhatsApp)</label>
+        <input type="tel" id="input-cliente-telefono" placeholder="Ej. 987 654 321" inputmode="tel" />
+      </div>
+      <div class="field mb-0" id="campo-pago-efectivo">
+        <label>Paga con (efectivo, opcional)</label>
+        <input type="number" id="input-cliente-pago" step="0.01" min="0" placeholder="Ej. 50.00" />
+        <div class="field-hint" id="vuelto-calculado"></div>
+      </div>
+      <div class="field-hint hidden" id="hint-venta-fiado" style="margin-top:-6px;"></div>
+      <div class="btn-row" style="margin-top:18px;">
+        <button type="button" class="btn btn-ghost" id="cerrar-cliente">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Generar boleta</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= MODAL: DESCUENTO ================= -->
+<div class="modal-backdrop" id="modal-descuento">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">Descuento</h2>
+    <p class="modal-sub">Se aplica a toda la venta activa.</p>
+    <div class="chip-row" style="margin-bottom:14px;">
+      <button type="button" class="chip active" id="chip-tipo-porcentaje" data-tipo="porcentaje">Porcentaje (%)</button>
+      <button type="button" class="chip" id="chip-tipo-monto" data-tipo="monto">Monto fijo (S/)</button>
+    </div>
+    <div class="field mb-0">
+      <label id="label-valor-descuento">Porcentaje de descuento</label>
+      <input type="number" id="input-valor-descuento" min="0" step="0.01" placeholder="Ej. 10" />
+    </div>
+    <div class="btn-row" style="margin-top:18px;">
+      <button type="button" class="btn btn-ghost" id="quitar-descuento">Quitar descuento</button>
+      <button type="button" class="btn btn-primary" id="aplicar-descuento">Aplicar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL: BOLETA GENERADA ================= -->
+<div class="modal-backdrop" id="modal-boleta">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">Boleta generada</h2>
+    <p class="modal-sub">Descárgala o envíala por WhatsApp.</p>
+    <div class="card card-soft" id="receipt-preview" style="padding:0; overflow:hidden;"></div>
+    <div class="btn-row" style="margin-top:16px;">
+      <button class="btn btn-outline" id="btn-descargar-boleta">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Descargar PNG
+      </button>
+      <button class="btn btn-primary hidden" id="btn-whatsapp-boleta">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21l1.65-4.95A9 9 0 1 1 8 19.3L3 21Z"/></svg>
+        Enviar por WhatsApp
+      </button>
+    </div>
+    <button class="btn btn-ghost" id="cerrar-boleta" style="margin-top:10px;">Nueva venta</button>
+  </div>
+</div>
+
+<!-- ================= MODAL: NUEVA LISTA ================= -->
+<div class="modal-backdrop" id="modal-nueva-lista">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">Nueva lista</h2>
+    <p class="modal-sub">¿Para qué cliente es este pedido?</p>
+    <form id="form-nueva-lista">
+      <div class="field">
+        <label>Nombre del cliente</label>
+        <input type="text" id="nueva-lista-nombre" placeholder="Ej. Don Carlos - la esquina" required />
+      </div>
+      <div class="field mb-0">
+        <label>Celular (opcional)</label>
+        <input type="tel" id="nueva-lista-telefono" placeholder="Ej. 987 654 321" inputmode="tel" />
+      </div>
+      <div class="btn-row" style="margin-top:18px;">
+        <button type="button" class="btn btn-ghost" id="cerrar-nueva-lista">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Crear lista</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= MODAL: DETALLE DE LISTA ================= -->
+<div class="modal-backdrop" id="modal-lista-detalle">
+  <div class="modal-sheet modal-sheet-lg">
+    <div class="modal-handle"></div>
+    <div class="flex-between" style="margin-bottom:4px;">
+      <h2 class="modal-title mb-0" id="detalle-lista-nombre">Lista</h2>
+      <button type="button" class="list-icon-btn danger" id="btn-eliminar-lista" title="Eliminar lista">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+      </button>
+    </div>
+    <p class="modal-sub" id="detalle-lista-meta">Pendiente</p>
+
+    <div class="field mb-0">
+      <label>Agregar producto</label>
+      <div class="search-row">
+        <div class="input-icon-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="buscar-lista-producto" placeholder="Nombre o código EAN…" autocomplete="off" />
+        </div>
+        <button type="button" class="btn-mic hidden" id="btn-mic-lista" title="Buscar por voz">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg>
+        </button>
+        <button type="button" class="btn-scan-mini" data-modo="lista" title="Escanear código">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="resultados-lista-producto" class="hidden" style="margin-top:8px;"></div>
+
+    <div class="flex-between" style="margin: 16px 0 8px;">
+      <div class="section-title" style="margin:0; font-size:17px;">Productos</div>
+    </div>
+    <div class="card venta-scroll venta-scroll-lg" style="padding-top:6px; padding-bottom:6px;">
+      <div id="lista-detalle-items"></div>
+    </div>
+
+    <div class="total-row" style="margin: 14px 4px;">
+      <span class="total-label">Total cotizado</span>
+      <span class="total-value" id="lista-detalle-total">S/ 0.00</span>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-ghost" id="btn-guardar-lista">Guardar</button>
+      <button type="button" class="btn btn-primary" id="btn-convertir-lista" style="flex:2;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+        Convertir a venta
+      </button>
+    </div>
+    <button type="button" class="btn btn-ghost" id="cerrar-lista-detalle" style="margin-top:10px;">Cerrar</button>
+  </div>
+</div>
+
+<div class="offscreen-render" id="receipt-render"></div>
+
+<div class="toast" id="toast">
+  <span id="toast-text"></span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-firestore-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="js/config.js"></script>
+<script src="js/state.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/voz.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/escaner.js"></script>
+<script src="js/ventas.js"></script>
+<script src="js/listas.js"></script>
+<script src="js/boleta.js"></script>
+<script src="js/resumen.js"></script>
+<script src="js/app.js"></script>
+<script src="js/main-ventas.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
+</script>
+
+</body>
+</html>

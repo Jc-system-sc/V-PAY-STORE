@@ -1,0 +1,43 @@
+/* ==========================================================================
+   HOME.CSS — exclusivo de index.html (Inicio)
+   ========================================================================== */
+
+.home-hero{ text-align:center; margin: 10px 0 26px; }
+
+/* Espacio para el QR de Yape (la imagen la agrega la propia dueña del
+   negocio, ver img/LEEME.txt). Si todavía no existe el archivo, se ve un
+   recuadro con instrucciones en vez de un ícono de imagen rota. */
+.yape-qr-wrap{
+  width: 132px; height: 132px; margin: 0 auto 12px;
+  border-radius: 22px; background: var(--surface-soft); border: 1.5px solid var(--line);
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+  box-shadow: 0 10px 22px rgba(138,109,94,.18);
+}
+.yape-qr-wrap img{ width:100%; height:100%; object-fit:cover; }
+.yape-qr-wrap.sin-imagen img{ display:none; }
+.yape-qr-wrap.sin-imagen::after{
+  content: "Coloca tu QR de Yape en img/qr-yape.png";
+  font-family: var(--font-body); font-size: 10.5px; font-weight: 600; line-height:1.4;
+  color: var(--ink-faint); padding: 14px; text-align:center;
+}
+.home-sub{ font-family: var(--font-body); font-size:12.5px; color: var(--ink-soft); margin-top:4px; }
+
+.home-tiles{ display:flex; flex-direction:column; gap:14px; }
+.home-tile{
+  display:flex; align-items:center; gap:16px; padding:18px;
+  border-radius: var(--radius-lg); border:1.5px solid var(--line); background: var(--surface);
+  text-align:left; box-shadow: var(--shadow-card); width:100%;
+  text-decoration:none; position:relative;
+}
+.home-tile:active{ transform: scale(.97); }
+.home-tile-icon{ width:54px; height:54px; border-radius:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.home-tile-icon.tile-ventas{ background: var(--price-soft); color: var(--price); }
+.home-tile-icon.tile-inventario{ background: var(--sky-soft); color:#4a5a8f; }
+.home-tile-icon.tile-cuentas{ background: var(--coral-soft); color: var(--coral); }
+.home-tile-icon.tile-ajustes{ background: var(--surface-soft); color: var(--ink-soft); }
+.home-tile-text{ flex:1; min-width:0; }
+.home-tile-title{ font-family: var(--font-display); font-size:18.5px; font-weight:700; color: var(--ink); }
+.home-tile-sub{ font-family: var(--font-body); font-size:11.5px; color: var(--ink-soft); margin-top:2px; }
+.home-tile-arrow{ color: var(--ink-faint); flex-shrink:0; }
+.home-tile-secondary{ padding:13px 18px; box-shadow:none; background: var(--surface-soft); border-style:dashed; }
+.home-tile-secondary .home-tile-title{ font-size:16px; }

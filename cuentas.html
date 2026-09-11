@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Cuentas</title>
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#b9a08f" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="icon" href="icons/icon-192.png" />
+
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/cuentas.css" />
+</head>
+<body>
+
+<div class="app-frame con-tabbar">
+
+  <header class="app-header">
+    <div class="awning-band">
+      <svg class="awning-scallop" viewBox="0 0 480 20" preserveAspectRatio="none">
+        <path d="M0,0 Q20.0,20 40.0,0 Q60.0,20 80.0,0 Q100.0,20 120.0,0 Q140.0,20 160.0,0 Q180.0,20 200.0,0 Q220.0,20 240.0,0 Q260.0,20 280.0,0 Q300.0,20 320.0,0 Q340.0,20 360.0,0 Q380.0,20 400.0,0 Q420.0,20 440.0,0 Q460.0,20 480.0,0 L480,20 L0,20 Z"></path>
+      </svg>
+    </div>
+  </header>
+
+  <main class="app-body">
+    <div class="page-header">
+      <a class="back-btn" href="index.html">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+      </a>
+      <div class="page-header-title">Cuentas</div>
+    </div>
+
+    <!-- ---------- Lista de cuentas ---------- -->
+    <section class="screen active" data-screen="cuentas">
+      <p class="section-sub">Clientes que compran a fiado. Cada compra se suma; cada abono resta.</p>
+
+      <button class="btn btn-primary" id="btn-nueva-cuenta" style="margin-bottom:16px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Nueva cuenta
+      </button>
+
+      <div class="card">
+        <div class="input-icon-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="buscar-cuentas" placeholder="Buscar cuenta por cliente…" autocomplete="off" />
+        </div>
+      </div>
+
+      <div id="lista-cuentas"></div>
+    </section>
+
+    <!-- ---------- Resumen de cuentas ---------- -->
+    <section class="screen" data-screen="resumen">
+      <div class="section-title">Deuda pendiente</div>
+      <div class="card">
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-value" id="resumen-cuentas-total" style="color:var(--coral);">S/ 0</div>
+            <div class="stat-label">Total pendiente</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="resumen-cuentas-cantidad">0</div>
+            <div class="stat-label">Cuentas con deuda</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">Mayores deudas</div>
+      <div class="card" style="padding-top:6px; padding-bottom:6px;">
+        <div id="lista-mayores-deudas"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tab-bar" data-tabbar="cuentas">
+    <div class="tab-indicator"></div>
+    <button class="tab-btn active" data-tab="cuentas">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h11l4 4v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M16 13h3"/></svg>
+      Cuentas
+    </button>
+    <button class="tab-btn" data-tab="resumen">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+      Resumen
+    </button>
+  </nav>
+</div>
+
+<!-- ================= MODAL: NUEVA CUENTA ================= -->
+<div class="modal-backdrop" id="modal-cuenta-nueva">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">Nueva cuenta</h2>
+    <p class="modal-sub">Abre una cuenta a un cliente de confianza, antes de su primera compra si quieres.</p>
+    <form id="form-cuenta-nueva">
+      <div class="field">
+        <label>Nombre del cliente</label>
+        <input type="text" id="nueva-cuenta-nombre" placeholder="Ej. Don Carlos - la esquina" required />
+      </div>
+      <div class="field mb-0">
+        <label>Celular (opcional)</label>
+        <input type="tel" id="nueva-cuenta-telefono" placeholder="Ej. 987 654 321" inputmode="tel" />
+      </div>
+      <div class="btn-row" style="margin-top:18px;">
+        <button type="button" class="btn btn-ghost" id="cerrar-cuenta-nueva">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Crear cuenta</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= MODAL: DETALLE DE CUENTA (historial + abono + PDF) ================= -->
+<div class="modal-backdrop" id="modal-cuenta-detalle">
+  <div class="modal-sheet modal-sheet-lg">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title mb-0" id="detalle-cuenta-nombre">Cliente</h2>
+    <p class="modal-sub" id="detalle-cuenta-meta">Sin celular registrado</p>
+
+    <div class="card card-soft saldo-destacado">
+      <div class="saldo-destacado-label">Saldo pendiente</div>
+      <div class="saldo-destacado-valor" id="detalle-cuenta-saldo">S/ 0.00</div>
+    </div>
+
+    <form id="form-abono-cuenta" class="field-row mb-0" style="align-items:flex-end; margin-top:14px;">
+      <div class="field mb-0" style="flex:2;">
+        <label>Registrar abono (S/)</label>
+        <input type="number" id="input-abono-monto" step="0.01" min="0.01" placeholder="Ej. 10.00" required />
+      </div>
+      <button type="submit" class="btn btn-primary" style="flex:1;">Abonar</button>
+    </form>
+
+    <div class="flex-between" style="margin: 18px 0 8px;">
+      <div class="section-title" style="margin:0; font-size:17px;">Historial</div>
+    </div>
+    <div class="card" style="padding-top:6px; padding-bottom:6px; max-height:300px; overflow-y:auto;">
+      <div id="detalle-cuenta-movimientos"></div>
+    </div>
+
+    <div class="btn-row" style="margin-top:14px;">
+      <button type="button" class="btn btn-outline" id="btn-pdf-cuenta">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Descargar PDF
+      </button>
+      <button type="button" class="btn btn-danger hidden" id="btn-eliminar-cuenta">Eliminar cuenta</button>
+    </div>
+    <button type="button" class="btn btn-ghost" id="cerrar-cuenta-detalle" style="margin-top:10px;">Cerrar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span id="toast-text"></span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-firestore-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+<script src="js/config.js"></script>
+<script src="js/state.js"></script>
+<script src="js/pdf.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/cuentas.js"></script>
+<script src="js/app.js"></script>
+<script src="js/main-cuentas.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
+</script>
+
+</body>
+</html>
