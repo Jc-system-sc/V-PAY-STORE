@@ -4,20 +4,29 @@
 
 .cat-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
 .cat-tile{
-  display:flex; flex-direction:column; align-items:flex-start; gap:10px; padding:16px;
-  border-radius: var(--radius-md); border:1.5px solid var(--line); background: var(--surface); text-align:left;
+  display:flex; flex-direction:column; align-items:flex-start; gap:11px; padding:17px;
+  border-radius: var(--radius-md); border:1px solid var(--line); background: var(--surface); text-align:left;
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 10px 20px -16px rgba(66,43,21,.22);
+  transition: transform .12s ease;
 }
 .cat-tile:active{ transform: scale(.96); }
-.cat-tile-icon{ width:44px; height:44px; border-radius:13px; background: var(--sky-soft); color:#4a5a8f; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.cat-tile-name{ font-family: var(--font-display); font-weight:700; font-size:15px; color: var(--ink); line-height:1.25; }
+.cat-tile-icon{
+  width:48px; height:48px; border-radius:15px; position:relative;
+  background: linear-gradient(155deg, var(--sky-soft), color-mix(in srgb, var(--sky-soft) 45%, var(--surface)));
+  color: var(--sky); display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.cat-tile-icon::before{ content:""; position:absolute; inset:-3px; border-radius:18px; border: 1.5px solid var(--sky); opacity:.18; }
+.cat-tile-name{ font-family: var(--font-display); font-weight:400; font-size:17px; font-style: italic; color: var(--ink); line-height:1.25; }
 .cat-tile-count{ font-family: var(--font-body); font-size:10.5px; color: var(--ink-faint); font-weight:600; }
 
-.subhead{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.subhead{ display:flex; align-items:center; gap:11px; margin-bottom:16px; }
 .subhead-back{
-  width:34px; height:34px; border-radius:10px; border:none; background: var(--surface-soft);
+  width:36px; height:36px; border-radius:11px; border:none; background: var(--surface-soft);
   color: var(--ink); display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  transition: transform .12s ease;
 }
-.subhead-title{ font-family: var(--font-display); font-size:18.5px; font-weight:700; flex:1; min-width:0; color: var(--ink); }
+.subhead-back:active{ transform: scale(.9); }
+.subhead-title{ font-family: var(--font-display); font-size:20px; font-weight:400; font-style: italic; flex:1; min-width:0; color: var(--ink); }
 
 .list-icon.mov-in{ background: var(--price-soft); color: var(--price); }
 .list-icon.mov-out{ background: var(--coral-soft); color: var(--coral); }

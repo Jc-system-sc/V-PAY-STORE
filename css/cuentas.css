@@ -1,12 +1,6 @@
 /* ==========================================================================
    CUENTAS.CSS — exclusivo de cuentas.html
-   (La mayoría de los componentes que usa esta página — tarjetas de
-   cliente, filas de historial, estadísticas — son compartidos y viven en
-   base.css. Aquí solo lo que le pertenece únicamente a Cuentas.)
+   (Los componentes que usa esta página — tarjetas de cliente, filas de
+   historial, estadísticas, el número grande de saldo — son compartidos y
+   viven en base.css, junto con Cervezas.)
    ========================================================================== */
-
-.saldo-destacado{ text-align:center; }
-.saldo-destacado-label{
-  font-size:12px; color: var(--ink-soft); font-weight:700; letter-spacing:.03em; text-transform:uppercase;
-}
-.saldo-destacado-valor{ font-family: var(--font-display); font-size:32px; font-weight:700; margin-top:4px; }

@@ -2,16 +2,28 @@
    HOME.CSS — exclusivo de index.html (Inicio)
    ========================================================================== */
 
-.home-hero{ text-align:center; margin: 10px 0 26px; }
+.home-hero{ text-align:center; margin: 4px 0 26px; }
+.home-hero .home-sub{
+  font-family: var(--font-display); font-style: italic; font-weight: 400;
+  font-size: 22px !important; color: var(--ink); letter-spacing: -0.01em;
+  margin-top: 20px;
+}
 
-/* Espacio para el QR de Yape (la imagen la agrega la propia dueña del
-   negocio, ver img/LEEME.txt). Si todavía no existe el archivo, se ve un
-   recuadro con instrucciones en vez de un ícono de imagen rota. */
+/* ---------- Tarjeta de Yape (protagonista, arriba de todo) ---------- */
+.yape-card-home{
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  padding: 28px 20px 24px; margin-bottom:0;
+  animation: entradaSuave .4s cubic-bezier(.22,.9,.4,1) both;
+}
+.yape-card-home .yape-qr-wrap{ width: 148px; height:148px; margin-bottom: 15px; }
+.yape-card-home .yape-qr-wrap.sin-imagen::after{ font-size: 11px; padding: 16px; }
+.yape-card-titulo{ font-family: var(--font-display); font-size:20px; font-weight:400; font-style: italic; color: var(--ink); }
+.yape-card-nombre{ font-family: var(--font-body); font-size:12.5px; font-weight:600; color: var(--ink-soft); margin-top:4px; }
+
 .yape-qr-wrap{
-  width: 132px; height: 132px; margin: 0 auto 12px;
-  border-radius: 22px; background: var(--surface-soft); border: 1.5px solid var(--line);
+  border-radius: 20px; background: var(--surface-soft); border: 1.5px solid var(--line);
   display:flex; align-items:center; justify-content:center; overflow:hidden;
-  box-shadow: 0 10px 22px rgba(138,109,94,.18);
+  box-shadow: inset 0 0 0 6px var(--surface);
 }
 .yape-qr-wrap img{ width:100%; height:100%; object-fit:cover; }
 .yape-qr-wrap.sin-imagen img{ display:none; }
@@ -20,24 +32,92 @@
   font-family: var(--font-body); font-size: 10.5px; font-weight: 600; line-height:1.4;
   color: var(--ink-faint); padding: 14px; text-align:center;
 }
-.home-sub{ font-family: var(--font-body); font-size:12.5px; color: var(--ink-soft); margin-top:4px; }
 
-.home-tiles{ display:flex; flex-direction:column; gap:14px; }
+/* ---------- Los 4 accesos, en grilla — cuadrados, no una lista ---------- */
+.home-tiles{ display:grid; grid-template-columns: 1fr 1fr; gap: 13px; margin-top: 24px; }
+
 .home-tile{
-  display:flex; align-items:center; gap:16px; padding:18px;
-  border-radius: var(--radius-lg); border:1.5px solid var(--line); background: var(--surface);
-  text-align:left; box-shadow: var(--shadow-card); width:100%;
-  text-decoration:none; position:relative;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+  gap:4px; padding: 24px 12px 20px;
+  aspect-ratio: 1 / 1.02;
+  border-radius: var(--radius-lg); border:1px solid var(--line); background: var(--surface);
+  text-decoration:none; position:relative; overflow:hidden;
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 14px 26px -18px rgba(66,43,21,.28);
+  transition: transform .15s cubic-bezier(.34,1.4,.64,1), box-shadow .15s ease;
+  animation: entradaTile .42s cubic-bezier(.22,.9,.4,1) both;
 }
-.home-tile:active{ transform: scale(.97); }
-.home-tile-icon{ width:54px; height:54px; border-radius:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.home-tile-icon.tile-ventas{ background: var(--price-soft); color: var(--price); }
-.home-tile-icon.tile-inventario{ background: var(--sky-soft); color:#4a5a8f; }
-.home-tile-icon.tile-cuentas{ background: var(--coral-soft); color: var(--coral); }
-.home-tile-icon.tile-ajustes{ background: var(--surface-soft); color: var(--ink-soft); }
-.home-tile-text{ flex:1; min-width:0; }
-.home-tile-title{ font-family: var(--font-display); font-size:18.5px; font-weight:700; color: var(--ink); }
-.home-tile-sub{ font-family: var(--font-body); font-size:11.5px; color: var(--ink-soft); margin-top:2px; }
-.home-tile-arrow{ color: var(--ink-faint); flex-shrink:0; }
-.home-tile-secondary{ padding:13px 18px; box-shadow:none; background: var(--surface-soft); border-style:dashed; }
-.home-tile-secondary .home-tile-title{ font-size:16px; }
+.home-tiles .home-tile:nth-child(1){ animation-delay: .04s; }
+.home-tiles .home-tile:nth-child(2){ animation-delay: .09s; }
+.home-tiles .home-tile:nth-child(3){ animation-delay: .14s; }
+.home-tiles .home-tile:nth-child(4){ animation-delay: .19s; }
+@keyframes entradaTile{
+  from{ opacity:0; transform: translateY(14px) scale(.96); }
+  to{ opacity:1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce){
+  .home-tile, .yape-card-home{ animation: none; }
+}
+.home-tile:active{ transform: scale(.95); }
+
+/* Insignia del ícono: doble tono + un anillo fino, como un sello de cera */
+.home-tile-icon{
+  width:64px; height:64px; border-radius:20px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  position:relative; margin-bottom: 6px;
+}
+.home-tile-icon::before{
+  content:""; position:absolute; inset:-5px; border-radius:24px;
+  border: 1.5px solid currentColor; opacity:.22;
+}
+.home-tile-icon.tile-ventas{ background: linear-gradient(155deg, var(--price-soft), color-mix(in srgb, var(--price-soft) 45%, var(--surface))); color: var(--price); }
+.home-tile-icon.tile-inventario{ background: linear-gradient(155deg, var(--sky-soft), color-mix(in srgb, var(--sky-soft) 45%, var(--surface))); color: var(--sky); }
+.home-tile-icon.tile-cuentas{ background: linear-gradient(155deg, var(--coral-soft), color-mix(in srgb, var(--coral-soft) 45%, var(--surface))); color: var(--coral); }
+.home-tile-icon.tile-ajustes{ background: linear-gradient(155deg, var(--primary-soft), color-mix(in srgb, var(--primary-soft) 45%, var(--surface))); color: var(--primary-dark); }
+
+.home-tile-text{ min-width:0; }
+.home-tile-title{ font-family: var(--font-display); font-size:19px; font-weight:400; font-style: italic; color: var(--ink); letter-spacing: -0.01em; }
+.home-tile-sub{ font-family: var(--font-body); font-size:10.8px; color: var(--ink-soft); margin-top:3px; line-height:1.35; padding: 0 2px; }
+
+/* La flechita ya no tiene sentido en un botón cuadrado centrado */
+.home-tile-arrow{ display:none; }
+
+/* ---------- Banner especial de Cervezas — distinto a propósito ---------- */
+.home-tile-especial{
+  display:flex; align-items:center; gap:15px; margin-top: 13px; padding: 18px 18px 18px 16px;
+  border-radius: var(--radius-lg); text-decoration:none; position:relative; overflow:hidden;
+  background: linear-gradient(120deg, var(--amber-soft) 0%, color-mix(in srgb, var(--amber-soft) 55%, var(--surface)) 100%);
+  border: 1px solid color-mix(in srgb, var(--amber) 30%, var(--line));
+  box-shadow: 0 14px 26px -18px rgba(66,43,21,.32);
+  animation: entradaTile .42s cubic-bezier(.22,.9,.4,1) both;
+  animation-delay: .26s;
+}
+.home-tile-especial:active{ transform: scale(.97); }
+.home-tile-especial .home-tile-arrow{ display:flex; color: var(--amber); }
+
+.home-tile-especial-icon{
+  width:56px; height:56px; border-radius:17px; flex-shrink:0; position:relative;
+  background: linear-gradient(155deg, #fff, color-mix(in srgb, var(--amber-soft) 70%, #fff));
+  color: var(--amber); display:flex; align-items:center; justify-content:center;
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--amber) 35%, transparent);
+}
+.home-tile-especial-text{ flex:1; min-width:0; }
+.home-tile-especial-badge{
+  font-family: var(--font-body); font-size: 9.5px; font-weight: 800; letter-spacing: 0.05em;
+  color: var(--amber); text-transform: uppercase; margin-bottom: 2px;
+}
+.home-tile-especial-title{ font-family: var(--font-display); font-size:21px; font-weight:400; font-style: italic; color: var(--ink); }
+.home-tile-especial-sub{ font-family: var(--font-body); font-size:11px; color: var(--ink-soft); margin-top:2px; line-height:1.4; }
+
+/* Variante de color para el banner del Catálogo (distinto al de Cervezas) */
+.home-tile-especial-sky{
+  background: linear-gradient(120deg, var(--sky-soft) 0%, color-mix(in srgb, var(--sky-soft) 55%, var(--surface)) 100%);
+  border-color: color-mix(in srgb, var(--sky) 30%, var(--line));
+  animation-delay: .32s;
+}
+.home-tile-especial-sky .home-tile-arrow{ color: var(--sky); }
+.home-tile-especial-sky .home-tile-especial-icon{
+  background: linear-gradient(155deg, #fff, color-mix(in srgb, var(--sky-soft) 70%, #fff));
+  color: var(--sky);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--sky) 35%, transparent);
+}
+.home-tile-especial-sky .home-tile-especial-badge{ color: var(--sky); }

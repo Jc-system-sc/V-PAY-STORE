@@ -1,27 +1,27 @@
 /* ==========================================================================
-   MAIN-CUENTAS.JS
-   Arranca la página de Cuentas (fiado). Conecta Firebase y sincroniza
-   solo la colección de cuentas.
+   MAIN-CERVEZAS.JS
+   Arranca la página de Cervezas. Conecta Firebase y sincroniza solo la
+   colección de cuentas de cerveza.
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.title = `Cuentas · ${NEGOCIO.nombre}`;
+  document.title = `Cervezas · ${NEGOCIO.nombre}`;
 
-  protegerConPin("cuentas", NEGOCIO.pinCuentas);
+  protegerConPin("cervezas", NEGOCIO.pinCervezas);
 
   initUI();
   initTemas();
-  initCuentas();
+  initCervezas();
 
   window.alCambiarPantalla = (pantalla) => {
-    if (pantalla === "cuentas") renderListaCuentas(document.getElementById("buscar-cuentas").value);
-    if (pantalla === "resumen") renderResumenCuentas();
+    if (pantalla === "cuentas") renderListaCuentasCerveza(document.getElementById("buscar-cervezas").value);
+    if (pantalla === "resumen") renderResumenCervezas();
   };
 
-  conectarFirebaseCuentas();
+  conectarFirebaseCervezas();
 });
 
-function conectarFirebaseCuentas() {
+function conectarFirebaseCervezas() {
   const configSinCompletar =
     !firebaseConfig.apiKey || firebaseConfig.apiKey === "TU_API_KEY" || !firebaseConfig.projectId;
 
@@ -35,21 +35,21 @@ function conectarFirebaseCuentas() {
     firebase.initializeApp(firebaseConfig);
     RosaState.db = firebase.firestore();
 
-    RosaState.db.collection("cuentas").onSnapshot(
+    RosaState.db.collection("cuentasCerveza").onSnapshot(
       (snapshot) => {
-        RosaState.cuentas = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        RosaState.cuentasCerveza = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         RosaState.firebaseListo = true;
         actualizarEstadoConexion(true);
 
         const activa = document.querySelector(".screen.active")?.dataset.screen;
-        if (activa === "cuentas") renderListaCuentas(document.getElementById("buscar-cuentas").value);
-        if (activa === "resumen") renderResumenCuentas();
-        if (document.getElementById("modal-cuenta-detalle").classList.contains("open")) renderDetalleCuenta();
+        if (activa === "cuentas") renderListaCuentasCerveza(document.getElementById("buscar-cervezas").value);
+        if (activa === "resumen") renderResumenCervezas();
+        if (document.getElementById("modal-cerveza-detalle").classList.contains("open")) renderDetalleCuentaCerveza();
       },
       (err) => {
         console.error(err);
         actualizarEstadoConexion(false);
-        mostrarToast("Error al leer las cuentas desde Firebase", "error");
+        mostrarToast("Error al leer las cuentas de cerveza desde Firebase", "error");
       }
     );
   } catch (err) {

@@ -21,12 +21,54 @@ function abrirCategoriaInventario(nombreCategoria) {
   cambiarPantalla("categoria-detalle");
 }
 
+/**
+ * Elimina la categoría que se está viendo. Si tiene productos, primero
+ * los mueve a "Sin categoría" (así no queda ningún producto huérfano).
+ */
+async function eliminarCategoriaActual() {
+  const nombre = categoriaInventarioActiva;
+  if (!nombre) return;
+  if (!RosaState.firebaseListo) {
+    mostrarToast("Firebase no está conectado todavía", "error");
+    return;
+  }
+
+  const afectados = RosaState.productos.filter((p) => p.categoria === nombre);
+  const mensaje = afectados.length
+    ? `Esta categoría tiene ${afectados.length} producto${afectados.length === 1 ? "" : "s"}. Se moverán a "Sin categoría". ¿Eliminar "${nombre}" de todas formas?`
+    : `¿Eliminar la categoría "${nombre}"? Esta acción no se puede deshacer.`;
+  if (!confirm(mensaje)) return;
+
+  try {
+    if (afectados.length) {
+      await asegurarCategoria("Sin categoría");
+      const lote = RosaState.db.batch();
+      afectados.forEach((p) => {
+        lote.update(RosaState.db.collection("productos").doc(p.id), { categoria: "Sin categoría" });
+      });
+      await lote.commit();
+    }
+
+    const coincidencias = await RosaState.db.collection("categorias").where("nombre", "==", nombre).get();
+    const loteBorrado = RosaState.db.batch();
+    coincidencias.forEach((doc) => loteBorrado.delete(doc.ref));
+    await loteBorrado.commit();
+
+    mostrarToast("Categoría eliminada");
+    cambiarPantalla("categorias");
+  } catch (err) {
+    console.error(err);
+    mostrarToast("No se pudo eliminar la categoría", "error");
+  }
+}
+
 function initInventario() {
   document.getElementById("buscar-inventario").addEventListener("input", () => renderGridCategorias());
 
   document.getElementById("btn-reporte-inventario").addEventListener("click", descargarPDFCatalogo);
 
   document.getElementById("subhead-back-categoria").addEventListener("click", () => cambiarPantalla("categorias"));
+  document.getElementById("btn-eliminar-categoria").addEventListener("click", eliminarCategoriaActual);
   document.getElementById("buscar-categoria-producto").addEventListener("input", aplicarFiltroProductosCategoria);
   document.getElementById("orden-categoria-producto").addEventListener("change", (e) => {
     ordenCategoriaActivo = e.target.value;

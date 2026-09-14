@@ -34,6 +34,43 @@
       <div class="page-header-title">Ajustes</div>
     </div>
 
+    <div class="section-title">De un vistazo</div>
+    <p class="section-sub">Toca cualquiera para ir directo a esa sección.</p>
+    <div class="resumen-general-grid">
+      <a class="resumen-mini-card" href="inventario.html#alertas">
+        <div class="resumen-mini-valor" id="resumen-mini-stock" style="color:var(--amber);">0</div>
+        <div class="resumen-mini-label">Bajo stock</div>
+      </a>
+      <a class="resumen-mini-card" href="cuentas.html">
+        <div class="resumen-mini-valor" id="resumen-mini-cuentas" style="color:var(--coral);">0</div>
+        <div class="resumen-mini-label">Deben (fiado)</div>
+      </a>
+      <a class="resumen-mini-card" href="cervezas.html">
+        <div class="resumen-mini-valor" id="resumen-mini-cervezas" style="color:var(--amber);">0</div>
+        <div class="resumen-mini-label">Cervezas pend.</div>
+      </a>
+      <a class="resumen-mini-card" href="ventas.html">
+        <div class="resumen-mini-valor" id="resumen-mini-pedidos" style="color:var(--sky);">0</div>
+        <div class="resumen-mini-label">Pedidos nuevos</div>
+      </a>
+    </div>
+
+    <div class="section-title">Comparte tu catálogo</div>
+    <p class="section-sub">Envíale este link a tus clientes para que arme su pedido solos, desde su celular.</p>
+    <div class="card">
+      <div class="catalogo-link-box" id="catalogo-link-box">cargando…</div>
+      <div class="btn-row" style="margin-top:12px;">
+        <button type="button" class="btn btn-outline" id="btn-copiar-catalogo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+          Copiar link
+        </button>
+        <button type="button" class="btn btn-primary" id="btn-whatsapp-catalogo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21l1.65-4.95A9 9 0 1 1 8 19.3L3 21Z"/></svg>
+          Compartir
+        </button>
+      </div>
+    </div>
+
     <div class="section-title">Apariencia</div>
     <p class="section-sub">Elige el color con el que se viste tu sistema.</p>
     <div class="card">
@@ -48,11 +85,30 @@
 
     <div class="section-title">Información del sistema</div>
     <div class="card">
-      <div class="info-row"><span>Productos en catálogo</span><span id="info-total-productos">0</span></div>
-      <div class="info-row"><span>Categorías</span><span id="info-total-categorias">0</span></div>
-      <div class="info-row"><span>Listas guardadas</span><span id="info-total-listas">0</span></div>
-      <div class="info-row"><span>Cuentas con deuda</span><span id="info-total-cuentas">0</span></div>
-      <div class="info-row"><span>Conexión a Firebase</span><span id="info-estado-firebase">—</span></div>
+      <div class="info-row">
+        <span><svg class="info-row-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7 12 3 4 7v10l8 4 8-4V7Z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg>Productos en catálogo</span>
+        <span id="info-total-productos">0</span>
+      </div>
+      <div class="info-row">
+        <span><svg class="info-row-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Categorías</span>
+        <span id="info-total-categorias">0</span>
+      </div>
+      <div class="info-row">
+        <span><svg class="info-row-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3 6 1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2"/></svg>Listas guardadas</span>
+        <span id="info-total-listas">0</span>
+      </div>
+      <div class="info-row">
+        <span><svg class="info-row-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7a2 2 0 0 1 2-2h11l4 4v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M16 13h3"/></svg>Cuentas con deuda</span>
+        <span id="info-total-cuentas">0</span>
+      </div>
+      <div class="info-row">
+        <span><svg class="info-row-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 8h9v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8Z"/><path d="M15 10h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2"/></svg>Cuentas de cerveza pendientes</span>
+        <span id="info-total-cervezas">0</span>
+      </div>
+      <div class="info-row">
+        <span><svg class="info-row-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C8 6 6 9 6 13a6 6 0 0 0 12 0c0-4-2-7-6-11Z"/></svg>Conexión a Firebase</span>
+        <span id="info-estado-firebase">—</span>
+      </div>
     </div>
 
     <div class="section-title">Ayuda</div>
@@ -81,13 +137,15 @@
       <p style="font-size:13px; line-height:1.6; margin:0 0 10px;"><strong>3. Registra tu catálogo.</strong> Entra a "Inventario → Registrar", elige o crea una categoría y agrega productos.</p>
       <p style="font-size:13px; line-height:1.6; margin:0 0 10px;"><strong>4. Vende.</strong> En "Ventas", escanea, busca por texto o por voz. Si es fiado, marca "Fiado" al cobrar.</p>
       <p style="font-size:13px; line-height:1.6; margin:0 0 10px;"><strong>5. Controla tu stock.</strong> En "Inventario" revisa categorías, movimientos y alertas de bajo stock.</p>
-      <p style="font-size:13px; line-height:1.6; margin:0;"><strong>6. Tu QR de Yape.</strong> Reemplaza el archivo <code>img/qr-yape.png</code> por tu propio código y edita tu nombre en <code>js/config.js</code> (campo "propietaria"). Aparecerá en Ventas → Vender.</p>
+      <p style="font-size:13px; line-height:1.6; margin:0 0 10px;"><strong>6. Tu QR de Yape.</strong> Reemplaza el archivo <code>img/qr-yape.png</code> por tu propio código y edita tu nombre en <code>js/config.js</code> (campo "propietaria"). Aparecerá arriba de todo en Inicio.</p>
+      <p style="font-size:13px; line-height:1.6; margin:0;"><strong>7. Comparte tu catálogo.</strong> En "Ajustes → Comparte tu catálogo" copia el link o mándalo por WhatsApp — tus clientes arman su pedido solos y te llega a Ventas → Listas.</p>
     </div>
     <button class="btn btn-primary" id="cerrar-guia" style="margin-top:16px;">Entendido</button>
   </div>
 </div>
 
 <div class="toast" id="toast">
+  <span id="toast-icon" class="toast-icon"></span>
   <span id="toast-text"></span>
 </div>
 

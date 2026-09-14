@@ -8,6 +8,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.title = `Inventario · ${NEGOCIO.nombre}`;
 
+  protegerConPin("inventario", NEGOCIO.pinInventario);
+
   initUI();
   initTemas();
   initEscanerGenerico();
@@ -20,6 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (pantalla === "movimientos") renderMovimientosInventario();
     if (pantalla === "alertas") renderAlertasStockBajo();
   };
+
+  // Si se entra con el link "#alertas" (ej. desde el resumen de Ajustes),
+  // salta directo a esa pestaña en vez de abrir siempre en Categorías.
+  if (location.hash === "#alertas") cambiarPantalla("alertas");
 
   conectarFirebaseInventario();
 });

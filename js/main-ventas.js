@@ -8,7 +8,6 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   document.title = `Ventas · ${NEGOCIO.nombre}`;
-  document.getElementById("texto-titular-yape").textContent = NEGOCIO.propietaria;
 
   initUI();
   initTemas();
@@ -71,6 +70,13 @@ function conectarFirebaseVentas() {
       RosaState.listas = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       const pantallaActiva = document.querySelector('.screen[data-screen="listas"]')?.classList.contains("active");
       if (pantallaActiva) renderListaDeListas(document.getElementById("buscar-listas").value);
+
+      const badge = document.getElementById("badge-tab-listas");
+      const pendientes = RosaState.listas.filter((l) => l.estado !== "convertida").length;
+      if (badge) {
+        badge.textContent = pendientes > 99 ? "99+" : String(pendientes);
+        badge.classList.toggle("hidden", pendientes === 0);
+      }
     });
 
     RosaState.db.collection("cuentas").onSnapshot((snapshot) => {

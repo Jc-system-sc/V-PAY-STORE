@@ -9,7 +9,7 @@
    que los celulares que ya instalaron la app descarguen la versión nueva.
    ========================================================================== */
 
-const CACHE_VERSION = "sistema-v4";
+const CACHE_VERSION = "sistema-v7";
 
 const ARCHIVOS_DEL_CASCARON = [
   "./",
@@ -17,6 +17,8 @@ const ARCHIVOS_DEL_CASCARON = [
   "./ventas.html",
   "./inventario.html",
   "./cuentas.html",
+  "./cervezas.html",
+  "./pedidos.html",
   "./ajustes.html",
   "./manifest.json",
 
@@ -25,6 +27,8 @@ const ARCHIVOS_DEL_CASCARON = [
   "./css/ventas.css",
   "./css/inventario.css",
   "./css/cuentas.css",
+  "./css/cervezas.css",
+  "./css/pedidos.css",
   "./css/ajustes.css",
 
   "./js/config.js",
@@ -34,6 +38,7 @@ const ARCHIVOS_DEL_CASCARON = [
   "./js/audio.js",
   "./js/voz.js",
   "./js/ui.js",
+  "./js/pin.js",
   "./js/escaner.js",
   "./js/catalogo.js",
   "./js/ventas.js",
@@ -41,6 +46,8 @@ const ARCHIVOS_DEL_CASCARON = [
   "./js/boleta.js",
   "./js/inventario.js",
   "./js/cuentas.js",
+  "./js/cervezas.js",
+  "./js/pedidos.js",
   "./js/resumen.js",
   "./js/mas.js",
   "./js/app.js",
@@ -48,6 +55,8 @@ const ARCHIVOS_DEL_CASCARON = [
   "./js/main-ventas.js",
   "./js/main-inventario.js",
   "./js/main-cuentas.js",
+  "./js/main-cervezas.js",
+  "./js/main-pedidos.js",
   "./js/main-ajustes.js"
 ];
 

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Catálogo</title>
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#b9a08f" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="icon" href="icons/icon-192.png" />
+
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/pedidos.css" />
+</head>
+<body>
+
+<div class="app-frame con-total-bar-simple">
+
+  <header class="app-header">
+    <div class="awning-band">
+      <svg class="awning-scallop" viewBox="0 0 480 20" preserveAspectRatio="none">
+        <path d="M0,0 Q20.0,20 40.0,0 Q60.0,20 80.0,0 Q100.0,20 120.0,0 Q140.0,20 160.0,0 Q180.0,20 200.0,0 Q220.0,20 240.0,0 Q260.0,20 280.0,0 Q300.0,20 320.0,0 Q340.0,20 360.0,0 Q380.0,20 400.0,0 Q420.0,20 440.0,0 Q460.0,20 480.0,0 L480,20 L0,20 Z"></path>
+      </svg>
+    </div>
+  </header>
+
+  <main class="app-body">
+    <div class="page-header">
+      <a class="back-btn" href="index.html">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+      </a>
+      <div class="page-header-title">Catálogo</div>
+    </div>
+    <p class="section-sub" style="margin-top:-14px;">Elige lo que quieras y arma tu pedido. Lo enviamos directo a caja.</p>
+
+    <div class="card">
+      <div class="input-icon-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="buscar-pedido-producto" placeholder="Buscar un producto…" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="chip-row" id="chips-categoria-pedido" style="margin-bottom:16px;"></div>
+
+    <div class="prod-grid" id="grid-productos-cliente"></div>
+  </main>
+
+  <div class="total-bar total-bar-cliente hidden" id="total-bar-cliente">
+    <div class="total-row">
+      <span class="total-label" id="contador-carrito-cliente">0 productos</span>
+      <span class="total-value" id="total-carrito-cliente">S/ 0.00</span>
+    </div>
+    <button type="button" class="btn btn-primary" id="btn-ver-carrito-cliente">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+      Ver mi pedido
+    </button>
+  </div>
+</div>
+
+<!-- ================= MODAL: CARRITO DEL CLIENTE ================= -->
+<div class="modal-backdrop" id="modal-carrito-cliente">
+  <div class="modal-sheet modal-sheet-lg">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">Tu pedido</h2>
+    <p class="modal-sub">Revisa las cantidades antes de enviarlo.</p>
+
+    <div class="card venta-scroll venta-scroll-lg" style="padding-top:6px; padding-bottom:6px;">
+      <div id="lista-carrito-cliente"></div>
+    </div>
+
+    <div class="total-row" style="margin: 14px 4px;">
+      <span class="total-label">Total</span>
+      <span class="total-value" id="carrito-cliente-total">S/ 0.00</span>
+    </div>
+
+    <form id="form-pedido-cliente">
+      <div class="field">
+        <label>Tu nombre</label>
+        <input type="text" id="pedido-cliente-nombre" placeholder="¿A nombre de quién?" required />
+      </div>
+      <div class="field">
+        <label>Celular (opcional)</label>
+        <input type="tel" id="pedido-cliente-telefono" placeholder="Ej. 987 654 321" inputmode="tel" />
+      </div>
+      <button type="submit" class="btn btn-primary" id="btn-enviar-pedido-cliente">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+        Enviar pedido
+      </button>
+    </form>
+    <button type="button" class="btn btn-ghost" id="cerrar-carrito-cliente" style="margin-top:10px;">Seguir viendo el catálogo</button>
+  </div>
+</div>
+
+<!-- ================= MODAL: PEDIDO ENVIADO (confirmación) ================= -->
+<div class="modal-backdrop" id="modal-pedido-enviado">
+  <div class="modal-sheet" style="text-align:center;">
+    <div class="modal-handle"></div>
+    <div class="pin-icon" style="background:var(--price-soft); color:var(--price); margin-bottom:16px;">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+    </div>
+    <h2 class="modal-title">¡Pedido enviado!</h2>
+    <p class="modal-sub">Avisa en caja cuando quieras recogerlo o coordina el pago. Gracias por tu compra.</p>
+    <button type="button" class="btn btn-primary" onclick="cerrarModal('modal-pedido-enviado')">Listo</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span id="toast-icon" class="toast-icon"></span>
+  <span id="toast-text"></span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-firestore-compat.min.js"></script>
+
+<script src="js/config.js"></script>
+<script src="js/state.js"></script>
+<script src="js/iconos.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/pedidos.js"></script>
+<script src="js/app.js"></script>
+<script src="js/main-pedidos.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
+</script>
+
+</body>
+</html>

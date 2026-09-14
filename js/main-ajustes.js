@@ -1,7 +1,8 @@
 /* ==========================================================================
    MAIN-AJUSTES.JS
-   Arranca la página de Ajustes: apariencia, información general del
-   sistema y ayuda. Conecta Firebase solo para mostrar contadores.
+   Arranca la página de Ajustes: resumen general, apariencia, información
+   del sistema y ayuda. Conecta Firebase para mostrar contadores en vivo
+   de todas las secciones (productos, listas, cuentas y cervezas).
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -32,6 +33,7 @@ function conectarFirebaseAjustes() {
       RosaState.productos = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       RosaState.firebaseListo = true;
       actualizarEstadoConexion(true);
+      actualizarResumenGeneral();
     });
     RosaState.db.collection("categorias").onSnapshot((snapshot) => {
       RosaState.categorias = snapshot.docs.map((doc) => doc.data().nombre);
@@ -40,10 +42,17 @@ function conectarFirebaseAjustes() {
     RosaState.db.collection("listas").onSnapshot((snapshot) => {
       RosaState.listas = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       actualizarInfoSistema();
+      actualizarResumenGeneral();
     });
     RosaState.db.collection("cuentas").onSnapshot((snapshot) => {
       RosaState.cuentas = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       actualizarInfoSistema();
+      actualizarResumenGeneral();
+    });
+    RosaState.db.collection("cuentasCerveza").onSnapshot((snapshot) => {
+      RosaState.cuentasCerveza = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      actualizarInfoSistema();
+      actualizarResumenGeneral();
     });
   } catch (err) {
     console.error(err);

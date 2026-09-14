@@ -103,6 +103,82 @@ function descargarPDFCuenta(cuenta) {
   guardarPDF(doc, nombreArchivo);
 }
 
+/* ---------------------- Estado de cuenta de cerveza ---------------------- */
+
+function descargarPDFCuentaCerveza(cuenta) {
+  if (!libreriaPDFDisponible()) return;
+
+  const { doc, anchoPagina, cursorInicial } = nuevoDocumentoPDF("Cuenta de cerveza");
+  let y = cursorInicial;
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(13);
+  doc.setTextColor(36, 26, 18);
+  doc.text(cuenta.cliente, 40, y);
+  y += 16;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(125, 113, 102);
+  if (cuenta.telefono) {
+    doc.text(`Celular: ${cuenta.telefono}`, 40, y);
+    y += 14;
+  }
+
+  const movimientos = [...(cuenta.movimientos || [])].sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+
+  let saldoDineroCorrido = 0;
+  let pendientesCorrido = 0;
+  const filas = movimientos.map((m) => {
+    if (m.tipo === "pedido") {
+      saldoDineroCorrido += m.monto;
+      pendientesCorrido += m.cantidad;
+      return [
+        formatoFechaHora(m.fecha),
+        "Pedido",
+        `${m.cantidad} u. x ${formatoMoneda(m.precioUnitario)}`,
+        formatoMoneda(m.monto),
+        "",
+        String(pendientesCorrido),
+        formatoMoneda(saldoDineroCorrido)
+      ];
+    }
+    if (m.tipo === "entrega") {
+      pendientesCorrido -= m.cantidad;
+      return [formatoFechaHora(m.fecha), "Entrega", `${m.cantidad} unidad(es)`, "", "", String(pendientesCorrido), formatoMoneda(saldoDineroCorrido)];
+    }
+    saldoDineroCorrido -= m.monto;
+    return [formatoFechaHora(m.fecha), "Pago", "—", "", formatoMoneda(m.monto), String(pendientesCorrido), formatoMoneda(saldoDineroCorrido)];
+  });
+
+  doc.autoTable({
+    startY: y + 10,
+    head: [["Fecha", "Tipo", "Detalle", "Pedido", "Pago", "Cervezas pend.", "Saldo S/"]],
+    body: filas.length ? filas : [["—", "Sin movimientos todavía", "", "", "", "0", formatoMoneda(0)]],
+    styles: { font: "helvetica", fontSize: 8.5, textColor: [36, 26, 18], cellPadding: 5 },
+    headStyles: { fillColor: [138, 106, 47], textColor: [255, 255, 255], fontStyle: "bold" },
+    alternateRowStyles: { fillColor: [244, 236, 223] },
+    margin: { left: 40, right: 40 },
+    columnStyles: { 3: { halign: "right" }, 4: { halign: "right" }, 5: { halign: "right" }, 6: { halign: "right" } }
+  });
+
+  const yFinal = doc.lastAutoTable.finalY + 26;
+  doc.setDrawColor(36, 26, 18);
+  doc.line(40, yFinal - 12, anchoPagina - 40, yFinal - 12);
+
+  const pendientesFinal = Math.max(0, (cuenta.cervezasPedidas || 0) - (cuenta.cervezasEntregadas || 0));
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.text(`Cervezas pendientes: ${pendientesFinal}`, 40, yFinal);
+  doc.setFontSize(14);
+  const textoSaldo = `Saldo: ${formatoMoneda(cuenta.saldoDinero || 0)}`;
+  doc.text(textoSaldo, anchoPagina - 40 - doc.getTextWidth(textoSaldo), yFinal);
+
+  const nombreArchivo = `cerveza-${cuenta.cliente.replace(/\s+/g, "_").toLowerCase()}.pdf`;
+  guardarPDF(doc, nombreArchivo);
+}
+
 /* ---------------------- Reporte de catálogo (inventario valorizado) ---------------------- */
 
 function descargarPDFCatalogo() {

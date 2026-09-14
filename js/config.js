@@ -35,19 +35,28 @@
    ========================================================================== */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAoidKmL0tHVHaWX6irhthZhTjZdkB044k",
-  authDomain: "v-pay-store.firebaseapp.com",
-  projectId: "v-pay-store",
-  storageBucket: "v-pay-store.firebasestorage.app",
-  messagingSenderId: "535662545801",
-  appId: "1:535662545801:web:b8a8423c4a4eb17a7e2f58"
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_PROYECTO.firebaseapp.com",
+  projectId: "TU_PROYECTO",
+  storageBucket: "TU_PROYECTO.appspot.com",
+  messagingSenderId: "TU_SENDER_ID",
+  appId: "TU_APP_ID"
 };
 
 /* Datos de tu negocio: edítalos con los tuyos. */
 const NEGOCIO = {
   nombre: "Mi Negocio", // aparece en el título de la pestaña, la boleta y los reportes PDF
-  propietaria: "Brigida Arroyo", // aparece debajo del QR de Yape, en Ventas
+  propietaria: "Nombre de la dueña o el dueño", // aparece debajo del QR de Yape, en Inicio
   moneda: "S/", // símbolo de moneda usado en toda la app
   whatsappCodigoPais: "51", // Perú. Cámbialo si vendes desde otro país.
-  creador: "Viax Studio" // crédito mostrado en "Ajustes"
+  creador: "Viax Studio", // crédito mostrado en "Ajustes"
+
+  // Clave de 4 dígitos para entrar a Inventario y a Cuentas (protege que
+  // cualquiera que agarre el celular vea el stock o las deudas). No es una
+  // contraseña de verdad -está guardada aquí mismo, en el código- pero
+  // alcanza para que un cliente o un curioso no entre por accidente.
+  // Puedes usar la misma clave para ambas, o una distinta para cada una.
+  pinInventario: "1234",
+  pinCuentas: "1234",
+  pinCervezas: "1234"
 };

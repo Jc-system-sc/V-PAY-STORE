@@ -89,14 +89,22 @@ function renderListaDeListas(query) {
     .map((l) => {
       const totalItems = (l.items || []).reduce((acc, i) => acc + i.cantidad, 0);
       const total = (l.items || []).reduce((acc, i) => acc + i.precio * i.cantidad, 0);
+      const esPedidoWeb = l.origen === "catalogo-cliente";
       return `
         <div class="lista-card" data-id="${l.id}" style="cursor:pointer">
-          <div class="lista-card-icon">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3 6 1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2"/></svg>
+          <div class="lista-card-icon" style="${esPedidoWeb ? "background:var(--sky-soft); color:var(--sky);" : ""}">
+            ${
+              esPedidoWeb
+                ? '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>'
+                : '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3 6 1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2"/></svg>'
+            }
           </div>
           <div class="lista-card-info">
             <div class="lista-card-nombre">${escaparHTML(l.cliente)}</div>
-            <div class="lista-card-meta">${totalItems} producto${totalItems === 1 ? "" : "s"}</div>
+            <div class="lista-card-meta">
+              ${totalItems} producto${totalItems === 1 ? "" : "s"}
+              ${esPedidoWeb ? '<span class="pill pill-sky" style="margin-left:6px;">Pedido web</span>' : ""}
+            </div>
           </div>
           <div class="lista-card-total">${formatoMoneda(total)}</div>
         </div>`;

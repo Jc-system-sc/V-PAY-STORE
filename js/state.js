@@ -12,6 +12,7 @@ const RosaState = {
   categorias: [],          // nombres de categoría, sincronizados en tiempo real
   listas: [],               // listas de clientes de confianza (pedidos/cotizaciones)
   cuentas: [],                // cuentas "a fiado" de clientes, sincronizadas en tiempo real
+  cuentasCerveza: [],           // cuentas de cervezas por cajas: pedidos, entregas y pagos
   movimientosInventario: [],   // historial de entradas/salidas de stock
   venta: [],                     // items de la venta activa en la pestaña "Vender"
   scannerActivo: false,
@@ -89,13 +90,22 @@ function mensajeVacio(mensaje, icono) {
     </div>`;
 }
 
-/** Muestra una notificación flotante breve */
+/** Muestra una notificación flotante breve, con un ícono según el tipo */
 let toastTimer = null;
 function mostrarToast(mensaje, tipo = "ok") {
   const toast = document.getElementById("toast");
   const texto = document.getElementById("toast-text");
+  const icono = document.getElementById("toast-icon");
   texto.textContent = mensaje;
   toast.classList.toggle("error", tipo === "error");
+  if (icono) {
+    icono.innerHTML =
+      tipo === "error"
+        ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>'
+        : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>';
+  }
+  toast.classList.remove("show");
+  void toast.offsetWidth; // reinicia la animación aunque el toast anterior siga visible
   toast.classList.add("show");
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
@@ -139,6 +149,35 @@ async function asegurarCategoria(nombreEscrito) {
     }
   }
   return nombre;
+}
+
+/* ---------------------- Cuentas de cervezas (por cajas/docenas) ---------------------- */
+
+/**
+ * Busca una cuenta de cerveza abierta por nombre de cliente (sin importar
+ * mayúsculas). Si no existe, la crea. Devuelve el id de la cuenta.
+ */
+async function asegurarCuentaCerveza(nombreCliente, telefono) {
+  const nombre = nombreCliente.trim();
+  const existente = RosaState.cuentasCerveza.find((c) => c.cliente.toLowerCase() === nombre.toLowerCase());
+  if (existente) {
+    if (telefono && !existente.telefono && RosaState.firebaseListo) {
+      RosaState.db.collection("cuentasCerveza").doc(existente.id).update({ telefono }).catch(() => {});
+    }
+    return existente.id;
+  }
+  if (!RosaState.firebaseListo) return null;
+  const ref = await RosaState.db.collection("cuentasCerveza").add({
+    cliente: nombre,
+    telefono: telefono || null,
+    saldoDinero: 0,
+    cervezasPedidas: 0,
+    cervezasEntregadas: 0,
+    movimientos: [],
+    creadaEn: firebase.firestore.FieldValue.serverTimestamp(),
+    actualizadaEn: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  return ref.id;
 }
 
 /* ---------------------- Cuentas (fiado) ---------------------- */
