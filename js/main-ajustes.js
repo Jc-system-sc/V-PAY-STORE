@@ -2,12 +2,14 @@
    MAIN-AJUSTES.JS
    Arranca la página de Ajustes: resumen general, apariencia, información
    del sistema y ayuda. Conecta Firebase para mostrar contadores en vivo
-   de todas las secciones (productos, listas, cuentas y cervezas).
+   de todas las secciones (productos, listas y cuentas).
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
   document.title = `Ajustes · ${NEGOCIO.nombre}`;
   document.getElementById("info-creador").textContent = NEGOCIO.creador;
+
+  protegerConPin(NEGOCIO.pin);
 
   initUI();
   initTemas();
@@ -46,11 +48,6 @@ function conectarFirebaseAjustes() {
     });
     RosaState.db.collection("cuentas").onSnapshot((snapshot) => {
       RosaState.cuentas = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      actualizarInfoSistema();
-      actualizarResumenGeneral();
-    });
-    RosaState.db.collection("cuentasCerveza").onSnapshot((snapshot) => {
-      RosaState.cuentasCerveza = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       actualizarInfoSistema();
       actualizarResumenGeneral();
     });

@@ -1,43 +1,37 @@
 /* ==========================================================================
    PIN.JS
-   Candado de 4 dígitos reutilizable. Se usa en Inventario y en Cuentas,
-   cada una con su propia clave (ver js/config.js). No es un login de
-   verdad —la clave vive en el propio código— pero evita que alguien
-   entre por accidente o sin permiso a ver el stock o las deudas.
+   Candado de 4 dígitos, compartido por Ventas, Inventario, Cuentas y
+   Ajustes — todo lo que un cliente no debería poder abrir (ver
+   js/config.js, campo NEGOCIO.pin). "Pedidos" es la única página sin
+   clave, porque es la que usan los clientes.
 
-   A propósito NO se recuerda nunca: si sales de la página (cambias de
-   pestaña, minimizas el navegador, mandas la app al fondo) y vuelves,
-   se vuelve a pedir el PIN desde cero.
+   Una vez ingresada la clave correcta, queda desbloqueada para el resto
+   de esa pestaña del navegador (no hay que repetirla en cada página
+   mientras trabajas), pero se vuelve a pedir si cierras el navegador o
+   abres una pestaña nueva.
    ========================================================================== */
+
+const PIN_SESSION_KEY = "admin_desbloqueado";
+const PIN_CIRCUNFERENCIA = 207.3; // 2 * PI * 33 (radio del anillo)
 
 let pinObjetivo = "";
 let pinIngresado = "";
-let pinDesbloqueadoAhora = false;
 
-/**
- * Bloquea la página hasta que se ingrese el PIN correcto.
- * nombreSeccion: solo para el texto en pantalla (ej. "Inventario").
- * pin: la clave de 4 dígitos correcta, desde config.js.
- */
-function protegerConPin(nombreSeccion, pin) {
+function protegerConPin(pin) {
   pinObjetivo = String(pin || "1234");
 
   const overlay = document.getElementById("pin-overlay");
   if (!overlay) return; // esta página no tiene candado en su HTML
 
+  if (sessionStorage.getItem(PIN_SESSION_KEY) === "1") {
+    overlay.classList.add("pin-oculto");
+    return;
+  }
+
   mostrarCandadoPin();
 
   overlay.querySelectorAll("[data-pin-tecla]").forEach((btn) => {
     btn.addEventListener("click", () => onTeclaPin(btn.dataset.pinTecla));
-  });
-
-  // Si el usuario sale de la app (cambia de pestaña, minimiza, la manda al
-  // fondo) y luego vuelve, se bloquea de nuevo — nunca queda "recordado".
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden" && pinDesbloqueadoAhora) {
-      pinDesbloqueadoAhora = false;
-      mostrarCandadoPin();
-    }
   });
 }
 
@@ -47,7 +41,7 @@ function mostrarCandadoPin() {
   overlay.classList.remove("pin-correcto", "pin-oculto");
   document.getElementById("pin-error").classList.add("hidden");
   pinIngresado = "";
-  actualizarPuntosPin();
+  actualizarAnilloPin();
 }
 
 function onTeclaPin(tecla) {
@@ -56,20 +50,26 @@ function onTeclaPin(tecla) {
 
   if (tecla === "borrar") {
     pinIngresado = pinIngresado.slice(0, -1);
-    actualizarPuntosPin();
+    actualizarAnilloPin();
     return;
   }
 
   if (pinIngresado.length >= 4) return;
   pinIngresado += tecla;
-  actualizarPuntosPin();
+  actualizarAnilloPin();
 
   if (pinIngresado.length === 4) {
-    setTimeout(() => verificarPin(), 120);
+    setTimeout(() => verificarPin(), 150);
   }
 }
 
-function actualizarPuntosPin() {
+/** Llena el anillo alrededor del candado y los puntitos, según cuántos dígitos van */
+function actualizarAnilloPin() {
+  const anillo = document.querySelector("#pin-overlay .pin-ring-fill");
+  if (anillo) {
+    const avance = pinIngresado.length / 4;
+    anillo.style.strokeDashoffset = String(PIN_CIRCUNFERENCIA * (1 - avance));
+  }
   document.querySelectorAll("#pin-overlay .pin-dot").forEach((dot, i) => {
     dot.classList.toggle("lleno", i < pinIngresado.length);
   });
@@ -78,17 +78,22 @@ function actualizarPuntosPin() {
 function verificarPin() {
   const overlay = document.getElementById("pin-overlay");
   if (pinIngresado === pinObjetivo) {
-    pinDesbloqueadoAhora = true;
+    sessionStorage.setItem(PIN_SESSION_KEY, "1");
     overlay.classList.add("pin-correcto");
-    setTimeout(() => overlay.classList.add("pin-oculto"), 260);
+    if (navigator.vibrate) navigator.vibrate(35);
+    setTimeout(() => overlay.classList.add("pin-oculto"), 480);
   } else {
     const teclado = overlay.querySelector(".pin-panel");
+    overlay.classList.add("pin-error-flash");
     teclado.classList.remove("pin-shake");
-    // Fuerza el reinicio de la animación aunque se repita el error seguido
-    void teclado.offsetWidth;
+    void teclado.offsetWidth; // reinicia la animación aunque se repita el error seguido
     teclado.classList.add("pin-shake");
     document.getElementById("pin-error").classList.remove("hidden");
+    if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
     pinIngresado = "";
-    setTimeout(() => actualizarPuntosPin(), 180);
+    setTimeout(() => {
+      actualizarAnilloPin();
+      overlay.classList.remove("pin-error-flash");
+    }, 420);
   }
 }

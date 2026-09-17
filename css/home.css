@@ -81,43 +81,29 @@
 /* La flechita ya no tiene sentido en un botón cuadrado centrado */
 .home-tile-arrow{ display:none; }
 
-/* ---------- Banner especial de Cervezas — distinto a propósito ---------- */
+/* ---------- Banner especial del Catálogo — distinto a propósito ---------- */
 .home-tile-especial{
   display:flex; align-items:center; gap:15px; margin-top: 13px; padding: 18px 18px 18px 16px;
   border-radius: var(--radius-lg); text-decoration:none; position:relative; overflow:hidden;
-  background: linear-gradient(120deg, var(--amber-soft) 0%, color-mix(in srgb, var(--amber-soft) 55%, var(--surface)) 100%);
-  border: 1px solid color-mix(in srgb, var(--amber) 30%, var(--line));
+  background: linear-gradient(120deg, var(--sky-soft) 0%, color-mix(in srgb, var(--sky-soft) 55%, var(--surface)) 100%);
+  border: 1px solid color-mix(in srgb, var(--sky) 30%, var(--line));
   box-shadow: 0 14px 26px -18px rgba(66,43,21,.32);
   animation: entradaTile .42s cubic-bezier(.22,.9,.4,1) both;
   animation-delay: .26s;
 }
 .home-tile-especial:active{ transform: scale(.97); }
-.home-tile-especial .home-tile-arrow{ display:flex; color: var(--amber); }
+.home-tile-especial .home-tile-arrow{ display:flex; color: var(--sky); }
 
 .home-tile-especial-icon{
   width:56px; height:56px; border-radius:17px; flex-shrink:0; position:relative;
-  background: linear-gradient(155deg, #fff, color-mix(in srgb, var(--amber-soft) 70%, #fff));
-  color: var(--amber); display:flex; align-items:center; justify-content:center;
-  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--amber) 35%, transparent);
+  background: linear-gradient(155deg, #fff, color-mix(in srgb, var(--sky-soft) 70%, #fff));
+  color: var(--sky); display:flex; align-items:center; justify-content:center;
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--sky) 35%, transparent);
 }
 .home-tile-especial-text{ flex:1; min-width:0; }
 .home-tile-especial-badge{
   font-family: var(--font-body); font-size: 9.5px; font-weight: 800; letter-spacing: 0.05em;
-  color: var(--amber); text-transform: uppercase; margin-bottom: 2px;
+  color: var(--sky); text-transform: uppercase; margin-bottom: 2px;
 }
 .home-tile-especial-title{ font-family: var(--font-display); font-size:21px; font-weight:400; font-style: italic; color: var(--ink); }
 .home-tile-especial-sub{ font-family: var(--font-body); font-size:11px; color: var(--ink-soft); margin-top:2px; line-height:1.4; }
-
-/* Variante de color para el banner del Catálogo (distinto al de Cervezas) */
-.home-tile-especial-sky{
-  background: linear-gradient(120deg, var(--sky-soft) 0%, color-mix(in srgb, var(--sky-soft) 55%, var(--surface)) 100%);
-  border-color: color-mix(in srgb, var(--sky) 30%, var(--line));
-  animation-delay: .32s;
-}
-.home-tile-especial-sky .home-tile-arrow{ color: var(--sky); }
-.home-tile-especial-sky .home-tile-especial-icon{
-  background: linear-gradient(155deg, #fff, color-mix(in srgb, var(--sky-soft) 70%, #fff));
-  color: var(--sky);
-  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--sky) 35%, transparent);
-}
-.home-tile-especial-sky .home-tile-especial-badge{ color: var(--sky); }

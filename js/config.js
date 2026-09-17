@@ -43,20 +43,19 @@ const firebaseConfig = {
   appId: "1:535662545801:web:b8a8423c4a4eb17a7e2f58"
 };
 
+
 /* Datos de tu negocio: edítalos con los tuyos. */
 const NEGOCIO = {
   nombre: "Mi Negocio", // aparece en el título de la pestaña, la boleta y los reportes PDF
-  propietaria: "Brigida Arroyo M.", // aparece debajo del QR de Yape, en Inicio
+  propietaria: "Nombre de la dueña o el dueño", // aparece debajo del QR de Yape, en Inicio
   moneda: "S/", // símbolo de moneda usado en toda la app
   whatsappCodigoPais: "51", // Perú. Cámbialo si vendes desde otro país.
   creador: "Viax Studio", // crédito mostrado en "Ajustes"
 
-  // Clave de 4 dígitos para entrar a Inventario y a Cuentas (protege que
-  // cualquiera que agarre el celular vea el stock o las deudas). No es una
-  // contraseña de verdad -está guardada aquí mismo, en el código- pero
+  // Clave de 4 dígitos para entrar a Ventas, Inventario, Cuentas y Ajustes
+  // (todo lo que un cliente NO debería poder abrir). "Pedidos" es la única
+  // página sin clave, porque es la que usan tus clientes.
+  // No es una contraseña de verdad -vive en este mismo archivo- pero
   // alcanza para que un cliente o un curioso no entre por accidente.
-  // Puedes usar la misma clave para ambas, o una distinta para cada una.
-  pinInventario: "1234",
-  pinCuentas: "1234",
-  pinCervezas: "1234"
+  pin: "1234"
 };

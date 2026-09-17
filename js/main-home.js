@@ -1,9 +1,9 @@
 /* ==========================================================================
    MAIN-HOME.JS
    Arranca la página de Inicio. Ya no es solo un menú: cada acceso muestra
-   una insignia con datos reales (bajo stock, deudas, cervezas pendientes,
-   pedidos de clientes esperando), para que Inicio funcione como un
-   panel de un vistazo, no solo como una lista de accesos.
+   una insignia con datos reales (bajo stock, deudas, pedidos de clientes
+   esperando), para que Inicio funcione como un panel de un vistazo, no
+   solo como una lista de accesos.
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -35,14 +35,6 @@ function conectarFirebaseHome() {
       const cuentas = snapshot.docs.map((doc) => doc.data());
       const conDeuda = cuentas.filter((c) => (c.saldo || 0) > 0).length;
       actualizarBadge("badge-home-cuentas", conDeuda);
-    });
-
-    RosaState.db.collection("cuentasCerveza").onSnapshot((snapshot) => {
-      const cuentas = snapshot.docs.map((doc) => doc.data());
-      const conPendiente = cuentas.filter(
-        (c) => (c.saldoDinero || 0) > 0 || (c.cervezasPedidas || 0) - (c.cervezasEntregadas || 0) > 0
-      ).length;
-      actualizarBadge("badge-home-cervezas", conPendiente);
     });
 
     RosaState.db

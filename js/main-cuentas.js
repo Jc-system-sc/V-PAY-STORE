@@ -7,7 +7,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.title = `Cuentas · ${NEGOCIO.nombre}`;
 
-  protegerConPin("cuentas", NEGOCIO.pinCuentas);
+  protegerConPin(NEGOCIO.pin);
 
   initUI();
   initTemas();

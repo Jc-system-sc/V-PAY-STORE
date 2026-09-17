@@ -69,6 +69,7 @@ function onEscaneoGenerico(decodedText, modo) {
       errorEAN.style.display = "none";
     }
     RosaAudio.beepEscaneo();
+    vibrarSiToca(25);
     cerrarEscanerGenerico();
     document.getElementById("input-nombre").focus();
     return;
@@ -78,6 +79,7 @@ function onEscaneoGenerico(decodedText, modo) {
     const producto = buscarProductoPorEAN(decodedText);
     if (producto) {
       RosaAudio.beepEscaneo();
+    vibrarSiToca(25);
       if (typeof agregarProductoALista === "function") {
         agregarProductoALista(producto);
       }

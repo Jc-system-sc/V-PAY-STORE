@@ -424,7 +424,7 @@ svg{ stroke-linecap: round; stroke-linejoin: round; }
 .empty-state{ text-align:center; padding: 30px 12px; font-family: var(--font-body); color: var(--ink-faint); font-size: 13px; font-weight: 400; line-height:1.5; }
 .empty-state svg{ margin-bottom: 10px; opacity:.55; }
 
-/* ---------- Número grande destacado (saldo de Cuentas y de Cervezas) ---------- */
+/* ---------- Número grande destacado (saldo de Cuentas) ---------- */
 .saldo-destacado{ text-align:center; padding: 22px 18px; }
 .saldo-destacado-label{ font-size:11.5px; color: var(--ink-soft); font-weight:600; }
 .saldo-destacado-valor{ font-family: var(--font-display); font-style: italic; font-size:38px; font-weight:400; margin-top:6px; }
@@ -520,7 +520,10 @@ svg{ stroke-linecap: round; stroke-linejoin: round; }
 .brand-credit strong{ font-family: var(--font-body); font-style: normal; font-weight: 700; color: var(--ink-soft); }
 
 /* ==========================================================================
-   CANDADO DE PIN — pantalla de bloqueo compartida (Inventario y Cuentas)
+   CANDADO DE PIN — pantalla de bloqueo compartida (Ventas, Inventario,
+   Cuentas y Ajustes). Un anillo va llenándose alrededor del candado a
+   medida que se escriben los dígitos, y al acertar el candado se
+   transforma en un check con un pulso de color.
    ========================================================================== */
 .pin-overlay{
   position:absolute; inset:0; z-index: 200;
@@ -531,42 +534,78 @@ svg{ stroke-linecap: round; stroke-linejoin: round; }
   transition: background .3s ease;
 }
 .pin-overlay.pin-oculto{ display:none; }
-.pin-overlay.pin-correcto{ animation: pinExito .28s ease forwards; }
+.pin-overlay.pin-correcto{ animation: pinExito .5s ease forwards; }
 @keyframes pinExito{
-  0%{ opacity:1; transform: scale(1); }
-  100%{ opacity:0; transform: scale(1.03); }
+  0%, 55%{ opacity:1; transform: scale(1); }
+  100%{ opacity:0; transform: scale(1.04); }
+}
+.pin-overlay.pin-error-flash .pin-ring-fill{ stroke: var(--coral) !important; }
+.pin-overlay.pin-error-flash .pin-icon{
+  background: linear-gradient(155deg, var(--coral-soft), color-mix(in srgb, var(--coral-soft) 55%, var(--surface))) !important;
+  color: var(--coral) !important;
 }
 
 .pin-panel{ width:100%; max-width: 300px; text-align:center; }
 
+/* ---- Candado + anillo de progreso ---- */
+.pin-icon-wrap{ position:relative; width:80px; height:80px; margin: 0 auto 18px; }
+.pin-ring{ position:absolute; inset:0; transform: rotate(-90deg); }
+.pin-ring-track{ fill:none; stroke: var(--line); stroke-width: 4; }
+.pin-ring-fill{
+  fill:none; stroke: var(--primary); stroke-width: 4; stroke-linecap: round;
+  stroke-dasharray: 207.3; stroke-dashoffset: 207.3;
+  transition: stroke-dashoffset .3s cubic-bezier(.34,1.1,.64,1), stroke .25s ease;
+}
 .pin-icon{
-  width:56px; height:56px; border-radius:50%; margin: 0 auto 18px;
+  position:absolute; inset:7px; border-radius:50%;
   background: linear-gradient(155deg, var(--primary-soft), color-mix(in srgb, var(--primary-soft) 55%, var(--surface)));
   color: var(--primary-dark);
   display:flex; align-items:center; justify-content:center;
+  transition: background .3s ease, color .3s ease;
 }
+.pin-icon svg{ position:absolute; transition: opacity .3s cubic-bezier(.34,1.4,.64,1), transform .3s cubic-bezier(.34,1.4,.64,1); }
+.pin-icon-check{ opacity:0; transform: scale(.4) rotate(-20deg); }
+.pin-overlay.pin-correcto .pin-icon-candado{ opacity:0; transform: scale(.4) rotate(20deg); }
+.pin-overlay.pin-correcto .pin-icon-check{ opacity:1; transform: scale(1) rotate(0); }
+.pin-overlay.pin-correcto .pin-icon{
+  background: linear-gradient(155deg, var(--price-soft), color-mix(in srgb, var(--price-soft) 55%, var(--surface)));
+  color: var(--price);
+}
+.pin-overlay.pin-correcto .pin-ring-fill{ stroke: var(--price); }
+
 .pin-title{ font-family: var(--font-display); font-size:27px; font-weight:400; font-style: italic; color: var(--ink); margin: 0 0 6px; }
 .pin-sub{ font-family: var(--font-body); font-size:12.5px; color: var(--ink-soft); line-height:1.5; margin: 0 0 26px; }
 
-.pin-dots{ display:flex; justify-content:center; gap:16px; margin-bottom: 10px; }
+.pin-dots{ display:flex; justify-content:center; gap:15px; margin-bottom: 10px; }
 .pin-dot{
-  width:15px; height:15px; border-radius:50%; border: 1.5px solid var(--line); background: var(--surface-soft);
-  transition: transform .18s cubic-bezier(.34,1.6,.64,1), background .15s ease, border-color .15s ease;
+  width:13px; height:13px; border-radius:50%; border: 1.5px solid var(--line); background: var(--surface-soft);
+  transition: transform .18s cubic-bezier(.34,1.7,.64,1), background .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
-.pin-dot.lleno{ background: var(--primary); border-color: var(--primary); transform: scale(1.18); }
+.pin-dot.lleno{
+  background: linear-gradient(155deg, var(--primary), var(--primary-dark)); border-color: transparent;
+  transform: scale(1.25); box-shadow: 0 3px 8px -2px color-mix(in srgb, var(--primary) 55%, transparent);
+}
 
 .pin-error{
   font-family: var(--font-body); font-size:12px; font-weight:700; color: var(--coral);
   margin: 4px 0 18px; min-height: 16px;
 }
 
-.pin-keypad{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; justify-items:center; }
+.pin-keypad{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 13px; justify-items:center; }
 .pin-key{
-  width:64px; height:64px; border-radius:50%; border: 1.5px solid var(--line); background: var(--surface-soft);
-  font-family: var(--font-display); font-size:24px; font-weight:400; color: var(--ink);
-  display:flex; align-items:center; justify-content:center; transition: transform .1s ease, background .1s ease;
+  position:relative; overflow:hidden;
+  width:66px; height:66px; border-radius:50%; border: none;
+  background: linear-gradient(160deg, var(--surface) 0%, var(--surface-soft) 100%);
+  box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 6px 14px -8px rgba(36,26,18,.28);
+  font-family: var(--font-display); font-size:25px; font-weight:400; color: var(--ink);
+  display:flex; align-items:center; justify-content:center; transition: transform .12s ease, box-shadow .12s ease;
 }
-.pin-key:active{ transform: scale(.9); background: var(--primary-soft); }
+.pin-key::after{
+  content:""; position:absolute; inset:0; border-radius:50%; background: var(--primary);
+  opacity:0; transform: scale(.4); transition: opacity .35s ease, transform .35s ease;
+}
+.pin-key:active{ transform: scale(.92); box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 2px 6px -3px rgba(36,26,18,.3); }
+.pin-key:active::after{ opacity:.16; transform: scale(1); transition: opacity .05s ease, transform .05s ease; }
 .pin-key-vacia{ visibility:hidden; }
 .pin-key-borrar{ color: var(--ink-soft); }
 

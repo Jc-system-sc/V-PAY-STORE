@@ -137,6 +137,7 @@ function onEscaneoExitoso(decodedText) {
 
   if (producto) {
     RosaAudio.beepEscaneo();
+    vibrarSiToca(25);
     agregarProductoAVenta(producto);
     etiqueta.textContent = `✓ ${producto.nombre}`;
   } else {

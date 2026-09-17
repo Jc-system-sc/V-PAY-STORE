@@ -3,7 +3,7 @@
    ========================================================================== */
 
 /* Esta página no tiene tab-bar, solo la barra de carrito flotante */
-.con-total-bar-simple{ padding-bottom: 130px; }
+.con-total-bar-simple{ padding-bottom: 128px; }
 .total-bar.total-bar-cliente{ bottom: 0; gap: 12px; }
 
 /* ---------- Chips de categoría, con su propio ícono (son FILTROS, no navegación) ---------- */
@@ -12,17 +12,17 @@
 }
 #chips-categoria-pedido .chip svg{ flex-shrink:0; }
 
-/* ---------- Grilla de productos ---------- */
-.prod-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+/* ---------- Grilla de productos: 3 columnas, tarjetas chicas ---------- */
+.prod-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
 
 .prod-card{
-  background: var(--surface); border-radius: var(--radius-lg); overflow:hidden;
+  background: var(--surface); border-radius: 16px; overflow:hidden;
   border: 1px solid var(--line);
-  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 14px 26px -18px rgba(66,43,21,.26);
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 10px 18px -16px rgba(66,43,21,.26);
   display:flex; flex-direction:column;
   animation: entradaSuave .35s cubic-bezier(.22,.9,.4,1) both;
 }
-.prod-card.agotado{ opacity:.72; }
+.prod-card.agotado{ opacity:.68; }
 
 .prod-card-img{
   position:relative; aspect-ratio: 1 / 1;
@@ -31,33 +31,39 @@
 }
 .prod-card-img img{ width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
 .prod-card-icono-fallback{ display:none; color: var(--ink-faint); }
+.prod-card-img.sin-imagen img{ display:none; }
 .prod-card-img.sin-imagen .prod-card-icono-fallback{ display:flex; }
 .prod-card-agotado-banner{
   position:absolute; inset:0; background: rgba(36,26,18,.55); color:#fff;
-  display:flex; align-items:center; justify-content:center; text-align:center; padding: 8px;
-  font-family: var(--font-body); font-size: 10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em;
+  display:flex; align-items:center; justify-content:center; text-align:center; padding: 4px;
+  font-family: var(--font-body); font-size: 8.3px; font-weight:800; text-transform:uppercase; letter-spacing:.04em;
 }
 
-.prod-card-info{ padding: 13px 12px 2px; flex:1; }
+.prod-card-info{ padding: 7px 7px 0; flex:1; }
 .prod-card-nombre{
-  font-family: var(--font-display); font-style: italic; font-size: 15.5px; font-weight:400; color: var(--ink);
-  line-height:1.28; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
-  min-height: 2.56em;
+  font-family: var(--font-display); font-style: italic; font-size: 11.5px; font-weight:400; color: var(--ink);
+  line-height:1.25; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  min-height: 2.42em;
 }
-.prod-card-precio{ font-family: var(--font-display); font-style: italic; font-size: 20px; font-weight:400; color: var(--price); margin-top:5px; }
-.prod-card-info .pill{ margin-top:7px; }
+.prod-card-precio{ font-family: var(--font-display); font-style: italic; font-size: 14.5px; font-weight:400; color: var(--price); margin-top:2px; }
 
-.prod-card-accion{ padding: 11px 12px 13px; }
+/* El botón "+" flota a medio camino entre la imagen y la info, como en
+   las apps de referencia — se ve minimalista y no ocupa una fila entera. */
+.prod-card-accion{ margin-top: -15px; padding: 0 6px 7px; display:flex; justify-content:flex-end; }
+
 .btn-agregar-producto{
-  width:100%; padding: 10px 10px; border-radius: 12px; border:none;
+  width:27px; height:27px; padding:0; flex-shrink:0; border:none; border-radius:50%;
   background: linear-gradient(150deg, var(--primary) 0%, var(--primary-dark) 100%); color:#fff8f2;
-  font-family: var(--font-body); font-weight:700; font-size:12.5px;
-  display:flex; align-items:center; justify-content:center; gap:6px;
-  box-shadow: 0 8px 16px -8px color-mix(in srgb, var(--primary-dark) 55%, transparent);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 5px 11px -3px color-mix(in srgb, var(--primary-dark) 55%, transparent), 0 0 0 2.5px var(--surface);
   transition: transform .12s ease;
 }
-.btn-agregar-producto:active{ transform: scale(.94); }
-.btn-agregar-producto:disabled{ opacity:.4; box-shadow:none; }
+.btn-agregar-producto:active{ transform: scale(.88); }
+.btn-agregar-producto:disabled{ opacity:.4; box-shadow: 0 0 0 2.5px var(--surface); }
 
-.prod-qty-control{ width:100%; justify-content:space-between; background: var(--primary-soft); }
-.prod-qty-control .qty-btn{ background: var(--surface); }
+.prod-qty-control{
+  width:auto; gap:0; padding:2px; background: var(--surface); border-radius: 999px;
+  box-shadow: 0 5px 11px -3px rgba(36,26,18,.22), 0 0 0 2.5px var(--surface);
+}
+.prod-qty-control .qty-btn{ width:22px; height:22px; border-radius:50%; box-shadow:none; background: var(--primary-soft); font-size:12px; }
+.prod-qty-control .qty-val{ font-size:11px; min-width:16px; }

@@ -12,7 +12,6 @@ const RosaState = {
   categorias: [],          // nombres de categoría, sincronizados en tiempo real
   listas: [],               // listas de clientes de confianza (pedidos/cotizaciones)
   cuentas: [],                // cuentas "a fiado" de clientes, sincronizadas en tiempo real
-  cuentasCerveza: [],           // cuentas de cervezas por cajas: pedidos, entregas y pagos
   movimientosInventario: [],   // historial de entradas/salidas de stock
   venta: [],                     // items de la venta activa en la pestaña "Vender"
   scannerActivo: false,
@@ -23,6 +22,44 @@ const RosaState = {
 function formatoMoneda(valor) {
   const n = Number(valor) || 0;
   return `${NEGOCIO.moneda} ${n.toFixed(2)}`;
+}
+
+/**
+ * Convierte un texto en un nombre de archivo seguro: sin tildes, sin
+ * mayúsculas, sin espacios ni símbolos raros. "Inca Kola 500ml" se
+ * convierte en "inca-kola-500ml".
+ */
+function slugificar(texto) {
+  return String(texto || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // quita tildes (á, é, í, ó, ú, ñ queda como n)
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * La ruta donde debe estar la imagen de un producto, calculada sola a
+ * partir de su nombre — no hay que escribir ninguna URL a mano. Solo hay
+ * que guardar el archivo con ese nombre exacto dentro de img/productos/
+ * (ver img/productos/LEEME.txt).
+ */
+function rutaImagenProducto(nombre) {
+  return `img/productos/${slugificar(nombre)}.jpg`;
+}
+
+/** Preferencias guardadas en el propio celular (interruptores de Ajustes) */
+function preferenciaActiva(clave, porDefecto = true) {
+  const valor = localStorage.getItem(`pref_${clave}`);
+  return valor === null ? porDefecto : valor === "1";
+}
+function guardarPreferencia(clave, activo) {
+  localStorage.setItem(`pref_${clave}`, activo ? "1" : "0");
+}
+
+/** Vibra un toque corto, solo si el celular lo soporta y la preferencia está activa */
+function vibrarSiToca(patron = 30) {
+  if (preferenciaActiva("vibracion", true) && navigator.vibrate) navigator.vibrate(patron);
 }
 
 /** Escapa texto para insertarlo de forma segura dentro de innerHTML */
@@ -149,35 +186,6 @@ async function asegurarCategoria(nombreEscrito) {
     }
   }
   return nombre;
-}
-
-/* ---------------------- Cuentas de cervezas (por cajas/docenas) ---------------------- */
-
-/**
- * Busca una cuenta de cerveza abierta por nombre de cliente (sin importar
- * mayúsculas). Si no existe, la crea. Devuelve el id de la cuenta.
- */
-async function asegurarCuentaCerveza(nombreCliente, telefono) {
-  const nombre = nombreCliente.trim();
-  const existente = RosaState.cuentasCerveza.find((c) => c.cliente.toLowerCase() === nombre.toLowerCase());
-  if (existente) {
-    if (telefono && !existente.telefono && RosaState.firebaseListo) {
-      RosaState.db.collection("cuentasCerveza").doc(existente.id).update({ telefono }).catch(() => {});
-    }
-    return existente.id;
-  }
-  if (!RosaState.firebaseListo) return null;
-  const ref = await RosaState.db.collection("cuentasCerveza").add({
-    cliente: nombre,
-    telefono: telefono || null,
-    saldoDinero: 0,
-    cervezasPedidas: 0,
-    cervezasEntregadas: 0,
-    movimientos: [],
-    creadaEn: firebase.firestore.FieldValue.serverTimestamp(),
-    actualizadaEn: firebase.firestore.FieldValue.serverTimestamp()
-  });
-  return ref.id;
 }
 
 /* ---------------------- Cuentas (fiado) ---------------------- */

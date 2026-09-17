@@ -93,19 +93,17 @@ function tarjetaProductoCliente(p) {
   const controlado = p.stock !== null && p.stock !== undefined;
   const agotado = controlado && p.stock <= 0;
   const alTope = controlado && cantidadEnCarrito >= p.stock;
-  const tieneImagen = !!p.imagenUrl;
 
   return `
     <div class="prod-card ${agotado ? "agotado" : ""}" data-id="${p.id}">
-      <div class="prod-card-img${tieneImagen ? "" : " sin-imagen"}">
-        ${tieneImagen ? `<img src="${escaparHTML(p.imagenUrl)}" alt="" loading="lazy" onerror="this.parentElement.classList.add('sin-imagen')" />` : ""}
-        <span class="prod-card-icono-fallback">${svgIconoCategoria(p.categoria, 30)}</span>
+      <div class="prod-card-img">
+        <img src="${rutaImagenProducto(p.nombre)}" alt="" loading="lazy" onerror="this.parentElement.classList.add('sin-imagen')" />
+        <span class="prod-card-icono-fallback">${svgIconoCategoria(p.categoria, 20)}</span>
         ${agotado ? '<div class="prod-card-agotado-banner">Agotado</div>' : ""}
       </div>
       <div class="prod-card-info">
         <div class="prod-card-nombre">${escaparHTML(p.nombre)}</div>
         <div class="prod-card-precio">${formatoMoneda(p.precio)}</div>
-        ${pillDeStock(p.stock)}
       </div>
       <div class="prod-card-accion">
         ${
@@ -116,8 +114,7 @@ function tarjetaProductoCliente(p) {
                  <button type="button" class="qty-btn" data-accion-cliente="mas" data-id="${p.id}" ${alTope ? "disabled" : ""}>+</button>
                </div>`
             : `<button type="button" class="btn-agregar-producto" data-accion-cliente="mas" data-id="${p.id}" ${agotado ? "disabled" : ""}>
-                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
-                 Agregar
+                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M12 5v14M5 12h14"/></svg>
                </button>`
         }
       </div>

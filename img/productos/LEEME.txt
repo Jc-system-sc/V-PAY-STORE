@@ -1,0 +1,27 @@
+CÓMO PONER LA FOTO DE UN PRODUCTO
+===================================
+
+No necesitas escribir ninguna URL ni link. El sistema calcula solo el
+nombre que debe tener el archivo, a partir del nombre del producto.
+
+1. Cuando registras o editas un producto en "Inventario → Registrar",
+   verás una cajita que dice algo así:
+
+       img/productos/inca-kola-500ml.jpg
+
+   Ese es el nombre EXACTO que debe tener el archivo de la foto.
+
+2. Prepara la foto (de preferencia cuadrada, para que se vea bien en el
+   catálogo) y guárdala con ese nombre exacto — todo en minúsculas, sin
+   tildes ni espacios (el sistema ya te lo muestra armado, solo cópialo).
+
+3. Pon el archivo dentro de esta misma carpeta ("img/productos/").
+
+Eso es todo. La imagen aparece sola en "Pedidos" (el catálogo para tus
+clientes) la próxima vez que se cargue la página.
+
+Si todavía no subiste la foto de un producto, en su lugar se ve
+automáticamente el ícono de su categoría — nunca una imagen rota.
+
+Formato: siempre ".jpg" (asegúrate de guardar/exportar la foto en ese
+formato, aunque el archivo original sea .png o .jpeg).

@@ -16,6 +16,7 @@ const RosaAudio = (() => {
   }
 
   function tone({ freq = 880, duration = 0.09, type = "sine", volume = 0.18, delay = 0 }) {
+    if (typeof preferenciaActiva === "function" && !preferenciaActiva("sonidos", true)) return;
     try {
       const audioCtx = getCtx();
       const osc = audioCtx.createOscillator();

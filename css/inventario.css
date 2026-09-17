@@ -30,3 +30,11 @@
 
 .list-icon.mov-in{ background: var(--price-soft); color: var(--price); }
 .list-icon.mov-out{ background: var(--coral-soft); color: var(--coral); }
+
+.ruta-imagen-box{
+  display:flex; align-items:center; gap:9px; padding: 12px 14px; border-radius: 12px;
+  background: var(--surface-soft); border: 1.5px dashed var(--line);
+  color: var(--primary-dark); font-family: var(--font-body); font-size: 12px; font-weight:600;
+  word-break: break-all; line-height:1.4;
+}
+.ruta-imagen-box svg{ flex-shrink:0; color: var(--ink-faint); }

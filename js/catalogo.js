@@ -18,7 +18,6 @@ function initCatalogo() {
   const inputCategoria = document.getElementById("input-categoria");
   const inputPrecio = document.getElementById("input-precio");
   const inputStock = document.getElementById("input-stock");
-  const inputImagen = document.getElementById("input-imagen");
   const errorEAN = document.getElementById("error-ean");
 
   form.addEventListener("submit", async (e) => {
@@ -30,7 +29,6 @@ function initCatalogo() {
     const categoriaTexto = inputCategoria.value.trim();
     const precio = parseFloat(inputPrecio.value);
     const stock = inputStock.value.trim() === "" ? null : parseInt(inputStock.value, 10);
-    const imagenUrl = inputImagen.value.trim() || null;
 
     if (!ean || !nombre || !categoriaTexto || isNaN(precio) || precio < 0) {
       mostrarToast("Completa todos los campos correctamente", "error");
@@ -58,7 +56,6 @@ function initCatalogo() {
         categoria,
         precio,
         stock,
-        imagenUrl,
         creadoEn: firebase.firestore.FieldValue.serverTimestamp()
       });
       if (stock !== null && stock > 0) {
@@ -76,6 +73,11 @@ function initCatalogo() {
   });
 
   inputEAN.addEventListener("input", () => (errorEAN.style.display = "none"));
+  inputNombre.addEventListener("input", () => {
+    const preview = document.getElementById("preview-ruta-imagen");
+    if (!preview) return;
+    preview.textContent = inputNombre.value.trim() ? rutaImagenProducto(inputNombre.value.trim()) : "";
+  });
 
   initEdicionProducto();
 }
@@ -88,6 +90,10 @@ function initCatalogo() {
 function initEdicionProducto() {
   document.getElementById("cerrar-editar").addEventListener("click", () => cerrarModal("modal-editar-producto"));
 
+  document.getElementById("editar-nombre").addEventListener("input", (e) => {
+    document.getElementById("preview-ruta-imagen-editar").textContent = e.target.value.trim() ? rutaImagenProducto(e.target.value.trim()) : "";
+  });
+
   document.getElementById("form-editar-producto").addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!productoEditandoId) return;
@@ -97,7 +103,6 @@ function initEdicionProducto() {
     const precio = parseFloat(document.getElementById("editar-precio").value);
     const inputStockEditar = document.getElementById("editar-stock");
     const stock = inputStockEditar.value.trim() === "" ? null : parseInt(inputStockEditar.value, 10);
-    const imagenUrl = document.getElementById("editar-imagen").value.trim() || null;
     const errorEditar = document.getElementById("error-editar");
     errorEditar.style.display = "none";
 
@@ -112,7 +117,7 @@ function initEdicionProducto() {
 
     try {
       const categoria = await asegurarCategoria(categoriaTexto);
-      await RosaState.db.collection("productos").doc(productoEditandoId).update({ nombre, categoria, precio, stock, imagenUrl });
+      await RosaState.db.collection("productos").doc(productoEditandoId).update({ nombre, categoria, precio, stock });
       mostrarToast("Producto actualizado");
       cerrarModal("modal-editar-producto");
     } catch (err) {
@@ -148,7 +153,7 @@ function abrirEdicionProducto(id) {
   document.getElementById("editar-precio").value = producto.precio.toFixed(2);
   document.getElementById("editar-stock").value =
     producto.stock === null || producto.stock === undefined ? "" : producto.stock;
-  document.getElementById("editar-imagen").value = producto.imagenUrl || "";
+  document.getElementById("preview-ruta-imagen-editar").textContent = rutaImagenProducto(producto.nombre);
   document.getElementById("error-editar").style.display = "none";
   abrirModal("modal-editar-producto");
 }

@@ -9,6 +9,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.title = `Ventas · ${NEGOCIO.nombre}`;
 
+  protegerConPin(NEGOCIO.pin);
+
   initUI();
   initTemas();
   initEscanerGenerico();
